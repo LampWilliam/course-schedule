@@ -1,7 +1,6 @@
 package com.courseschedule.common.exception;
 
 import com.courseschedule.common.lang.Result;
-import jdk.nashorn.internal.runtime.regexp.joni.Regex;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.ShiroException;
 import org.springframework.http.HttpStatus;
@@ -10,6 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import redis.clients.jedis.exceptions.JedisConnectionException;
@@ -22,6 +22,17 @@ import java.io.IOException;
 @Slf4j // log是从这里拿出来的
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    /**
+     * 处理排课的异常
+     */
+    @ExceptionHandler(AbstractCourseArrangeException.class)
+    @ResponseBody
+    public Result error(Exception e) {
+        log.error(e.getMessage());
+        return Result.error("服务器出现异常");
+    }
+
+
     /**
      * 捕捉shiro的异常
      * 比如没有权限，用户登录异常

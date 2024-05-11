@@ -2,17 +2,18 @@ package com.courseschedule.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
 
 /**
  * <p>
  * [output]课程表
  * </p>
  *
- * @author 
+ * @author
  * @since 2024-05-10
  */
 @Data
@@ -46,7 +47,7 @@ public class Timetable implements Serializable {
     /**
      * 教室编号
      */
-    private String classroomNo;
+    private String roomNo;
 
     /**
      * 上课时间

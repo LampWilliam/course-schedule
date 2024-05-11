@@ -31,6 +31,7 @@ courseschedule:
         # token有效时长，7天，单位秒
         expire: 604800
         header: token
-logging:
-    level:
-        root: WARN
+# 不知道会不会影响自定义log所以先注释了
+#logging:
+#    level:
+#        root: WARN
