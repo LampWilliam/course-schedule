@@ -1,6 +1,6 @@
 # course-schedule
 
-如有爆红请勿担心，因为本身就是有BUG的:}
+对应的前端部分在 [course-schedule-vue: 排课项目的前端部分 (gitee.com)](https://gitee.com/akashi-chen/course-schedule-vue)
 
 
 
