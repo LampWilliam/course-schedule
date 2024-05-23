@@ -2,4 +2,63 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.courseschedule.mapper.TimetableMapper">
 
+    <select id="getConflictingColumnNameList" resultType="java.lang.String">
+        SELECT DISTINCT ${columnName} FROM
+        (
+        SELECT DISTINCT t1.*
+        FROM timetable t1, timetable t2
+        WHERE t1.semester_id = t2.semester_id
+        AND t1.is_deleted = t2.is_deleted
+        AND (t1.class_no = t2.class_no OR t1.teacher_no = t2.teacher_no OR t1.room_no = t2.room_no) -- 同个体
+        AND (t1.timeslot = t2.timeslot AND (t1.start_week &lt;= t2.end_week AND t2.start_week&lt;= t1.end_week) AND t1.biweekly+t2.biweekly != 3) -- 同时
+        AND t1.id != t2.id -- 不同任务
+        AND t1.is_deleted = 0
+        AND t1.semester_id = #{semesterId}
+        ) AS base_result;
+    </select>
+
+    <select id="getConflictingTimeslotIdList" resultType="java.lang.Long">
+        SELECT id FROM
+        (
+        SELECT DISTINCT t1.*
+        FROM timetable t1, timetable t2
+        WHERE t1.semester_id = t2.semester_id
+        AND t1.is_deleted = t2.is_deleted
+        AND (t1.class_no = t2.class_no OR t1.teacher_no = t2.teacher_no OR t1.room_no = t2.room_no) -- 同个体
+        AND (t1.timeslot = t2.timeslot AND (t1.start_week&lt;=t2.end_week AND t2.start_week&lt;= t1.end_week) AND t1.biweekly+t2.biweekly != 3) -- 同时
+        AND t1.id != t2.id -- 不同任务
+        AND t1.is_deleted = 0
+        AND t1.semester_id = #{semesterId}
+        ) AS base_result
+        WHERE ${columnName} = #{no};
+    </select>
+
+    <select id="getConfilctList" resultType="com.courseschedule.common.dto.TimetableDto">
+        SELECT '班级冲突' AS conflict_type, t2.*
+        FROM timetable t1, timetable t2
+        WHERE t1.semester_id = t2.semester_id
+        AND t1.is_deleted = t2.is_deleted
+        AND (t1.class_no = t2.class_no) -- 同个体
+        AND (t1.timeslot = t2.timeslot AND (t1.start_week&lt;=t2.end_week AND t2.start_week&lt;= t1.end_week) AND t1.biweekly+t2.biweekly != 3) -- 同时
+        AND t1.id != t2.id -- 不同任务
+        AND t1.id = #{id}
+        UNION
+        SELECT '教师冲突' AS conflict_type, t2.*
+        FROM timetable t1, timetable t2
+        WHERE t1.semester_id = t2.semester_id
+        AND t1.is_deleted = t2.is_deleted
+        AND (t1.teacher_no = t2.teacher_no) -- 同个体
+        AND (t1.timeslot = t2.timeslot AND (t1.start_week&lt;=t2.end_week AND t2.start_week&lt;= t1.end_week) AND t1.biweekly+t2.biweekly != 3) -- 同时
+        AND t1.id != t2.id -- 不同任务
+        AND t1.id = #{id}
+        UNION
+        SELECT '教室冲突' AS conflict_type, t2.*
+        FROM timetable t1, timetable t2
+        WHERE t1.semester_id = t2.semester_id
+        AND t1.is_deleted = t2.is_deleted
+        AND (t1.room_no = t2.room_no) -- 同个体
+        AND (t1.timeslot = t2.timeslot AND (t1.start_week&lt;=t2.end_week AND t2.start_week&lt;= t1.end_week) AND t1.biweekly+t2.biweekly != 3) -- 同时
+        AND t1.id != t2.id -- 不同任务
+        AND t1.id = #{id}
+    </select>
 </mapper>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.courseschedule.mapper.TimetableRehearsalMapper">
+
+    <select id="rehearsalChangeTimeslot" resultType="com.courseschedule.entity.TimetableRehearsal">
+        SELECT DISTINCT t1.*
+        FROM timetable_rehearsal t1, timetable_rehearsal t2
+        WHERE (t1.class_no = t2.class_no OR t1.teacher_no = t2.teacher_no OR t1.room_no = t2.room_no) -- 同个体
+        AND (t1.timeslot = t2.timeslot AND (t1.start_week&lt;=t2.end_week AND t2.start_week&lt;= t1.end_week) AND t1.biweekly+t2.biweekly != 3) -- 同时
+        AND t1.id != t2.id -- 不同任务
+        AND t1.id = #{id}
+    </select>
+</mapper>

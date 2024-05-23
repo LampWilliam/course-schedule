@@ -1,8 +1,10 @@
 package com.courseschedule.service;
 
 import com.courseschedule.common.lang.Result;
+import com.courseschedule.entity.Semester;
 import com.courseschedule.entity.Task;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * <p>
@@ -17,5 +19,8 @@ public interface TaskService extends IService<Task> {
     /**
      * 排课算法
      */
-    Result courseScheduling();
+    @Transactional(rollbackFor = Exception.class)//该方法中抛出Exception及其子类时，当前事务回滚
+    Result courseScheduling(Semester semester);
+
+    Result getList();
 }

@@ -10,76 +10,52 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
  * <p>
- * [output]课程表
+ *
  * </p>
  *
  * @author
- * @since 2024-05-10
+ * @since 2024-05-19
  */
-
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class Timetable implements Serializable {
+public class Semester implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * id
-     */
     @JsonSerialize(using = ToStringSerializer.class) //适应前端--字段类型从数值转换为字符串
     @TableId(value = "id", type = IdType.ASSIGN_ID) //雪花算法
     private Long id;
 
     /**
-     * 班级编号
+     * 学期名
      */
-    private String classNo;
+    private String semesterName;
 
     /**
-     * 课程编号
+     * 学期总周数
      */
-    private String courseNo;
+    private Integer semesterWeeksSum;
 
     /**
-     * 讲师编号
+     * 学期开始日（必须为星期一）
      */
-    private String teacherNo;
+    private LocalDate semesterStartDate;
 
     /**
-     * 教室编号
+     * 学期结束日
      */
-    private String roomNo;
+    private LocalDate semesterEndDate;
 
     /**
-     * 上课时间(大节)
+     * 是否已排课 0未排课 1已排课
      */
-    private Integer timeslot;
-
-    /**
-     * 开始周
-     */
-    private Integer startWeek;
-
-    /**
-     * 结束周
-     */
-    private Integer endWeek;
-
-    /**
-     * 单双周 0代表非单双周 1代表单周 2代表双周
-     */
-    private Integer biweekly;
-
-    /**
-     * 关联学期Id
-     */
-    @JsonSerialize(using = ToStringSerializer.class)
-    private Long semesterId;
+    private Integer semesterStatus;
 
 
     /**
@@ -111,5 +87,10 @@ public class Timetable implements Serializable {
      */
     private Integer isDeleted;
 
-
+    /**
+     * 通过开始日和总周数，自动计算结束日
+     */
+    public void setSemesterEndDate() {
+        this.semesterEndDate = semesterStartDate.plusWeeks(semesterWeeksSum);
+    }
 }

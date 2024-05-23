@@ -1,7 +1,6 @@
 package com.courseschedule.shiro;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.courseschedule.common.dto.UserDto;
 import com.courseschedule.entity.User;
 import com.courseschedule.service.UserService;
@@ -68,11 +67,12 @@ public class UserRealm extends AuthorizingRealm {
         // 这个放用户角色的名字
         Set<String> roleName = new HashSet<>();
 
-        // if (userDto.getUserType() == 1) {
-        //     roleName.add("teacher");
-        // } else if (userDto.getUserType() == 2) {
-        //     roleName.add("student");
-        // }
+        switch (userDto.getType()) {
+            case 0: roleName.add("admin"); break;
+            case 1: roleName.add("superAdmin"); break;
+            case 2: roleName.add("teacher"); break;// 这个不打算做 非必须
+            case 3: roleName.add("student"); break;// 这个不打算做 非必须
+        }
 
         // 将 角色名称级权限的名称放进 info中 以供 shiroConfig 拦截
         info.setRoles(roleName);
