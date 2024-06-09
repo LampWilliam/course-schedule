@@ -1,14 +1,21 @@
 package com.courseschedule.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.courseschedule.common.lang.Result;
+import com.courseschedule.common.lang.ServerResponse;
 import com.courseschedule.entity.Semester;
+import com.courseschedule.service.SemesterService;
 import com.courseschedule.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * <p>
@@ -31,6 +38,7 @@ public class TaskController {
     public Result getList() {
         return taskService.getList();
     }
+
 
     /**
      * 排课算法接口。通过查询task表进行排课，排课后结果存入timetable表

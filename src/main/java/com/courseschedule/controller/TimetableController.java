@@ -1,16 +1,26 @@
 package com.courseschedule.controller;
 
 
+import cn.afterturn.easypoi.excel.ExcelExportUtil;
+import cn.afterturn.easypoi.excel.entity.ExportParams;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.courseschedule.common.lang.Result;
+import com.courseschedule.entity.Task;
 import com.courseschedule.entity.Timetable;
 import com.courseschedule.service.TimetableService;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * <p>
@@ -23,8 +33,11 @@ import java.util.LinkedList;
 @RestController
 @RequestMapping("/timetable")
 public class TimetableController {
-    @Autowired
+
+
+    @Resource
     private TimetableService timetableService;
+
     /*****************************手动排课的冲突检查*************************************/
 
     /** 1. 获取第 semesterId 学期课表中
@@ -75,10 +88,67 @@ public class TimetableController {
      */
     @GetMapping("/{classNo}")
     public Result getTimetable(@PathVariable String classNo) {
-        return Result.success("查询成功", new LinkedList<Timetable>());
+        return timetableService.getTimetableByClassNo(classNo);
+    }
+
+    /**
+     * 根据班级编号查找课表
+     */
+    @GetMapping("/class/{semesterId}/{classNo}")
+    public Result getClassTimetable(@PathVariable("semesterId") String semesterId,
+                                    @PathVariable("classNo") String classNo) {
+        LambdaQueryWrapper<Timetable> wrapper = new LambdaQueryWrapper<Timetable>()
+                .eq(Timetable::getSemesterId, semesterId)
+                .eq(Timetable::getClassNo, classNo)
+                .orderByAsc(Timetable::getTimeslot);
+        List<Timetable> timetableList = timetableService.list(wrapper);
+        if (null == timetableList || timetableList.isEmpty()) {
+            return Result.error("该班级在该学期没有课表");
+        }
+        return timetableService.queryTimetableByClassNo(timetableList);
+    }
+
+    /**
+     * 根据教室编号查找课表
+     */
+    @GetMapping("/room/{semesterId}/{roomNo}")
+    public Result getRoomTimetable(@PathVariable("semesterId") String semesterId,
+                                    @PathVariable("roomNo") String roomNo) {
+        LambdaQueryWrapper<Timetable> wrapper = new LambdaQueryWrapper<Timetable>()
+                .eq(Timetable::getSemesterId, semesterId)
+                .eq(Timetable::getRoomNo, roomNo)
+                .orderByAsc(Timetable::getTimeslot);
+        List<Timetable> timetableList = timetableService.list(wrapper);
+        if (null == timetableList || timetableList.isEmpty()) {
+            return Result.error("该教室在该学期没有课表");
+        }
+        return timetableService.queryTimetableByClassNo(timetableList);
+    }
+
+    /**
+     * 根据教师编号查找课表
+     */
+    @GetMapping("/teacher/{semesterId}/{teacherNo}")
+    public Result getTeacherTimetable(@PathVariable("semesterId") String semesterId,
+                                   @PathVariable("teacherNo") String teacherNo) {
+        LambdaQueryWrapper<Timetable> wrapper = new LambdaQueryWrapper<Timetable>()
+                .eq(Timetable::getSemesterId, semesterId)
+                .eq(Timetable::getTeacherNo, teacherNo)
+                .orderByAsc(Timetable::getTimeslot);
+        List<Timetable> timetableList = timetableService.list(wrapper);
+        if (null == timetableList || timetableList.isEmpty()) {
+            return Result.error("该教师在该学期没有课表");
+        }
+        return timetableService.queryTimetableByClassNo(timetableList);
     }
     // 查询所有班级课表(根据班级查找课表)
-
+    /**
+     * 查询开课任务
+     */
+    @GetMapping("/getList")
+    public Result getList() {
+        return timetableService.getList();
+    }
 
     // 根据教师编号查找课表
     // 查询所有教师课表

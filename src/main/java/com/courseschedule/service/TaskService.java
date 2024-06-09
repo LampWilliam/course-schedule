@@ -4,7 +4,9 @@ import com.courseschedule.common.lang.Result;
 import com.courseschedule.entity.Semester;
 import com.courseschedule.entity.Task;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.servlet.function.ServerResponse;
 
 /**
  * <p>
@@ -23,4 +25,6 @@ public interface TaskService extends IService<Task> {
     Result courseScheduling(Semester semester);
 
     Result getList();
+
+//    ServerResponse classScheduling(@Param("semester") String semester);
 }

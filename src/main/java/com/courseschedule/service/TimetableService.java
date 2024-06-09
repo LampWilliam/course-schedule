@@ -4,6 +4,8 @@ import com.courseschedule.common.lang.Result;
 import com.courseschedule.entity.Timetable;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * <p>
  * [output]课程表 服务类
@@ -21,4 +23,10 @@ public interface TimetableService extends IService<Timetable> {
     Result getConfilctList(Long id);
 
     Result rehearsalChangeTimeslot(Long id);
+
+    Result getList();
+
+    Result getTimetableByClassNo(String classNo);
+
+    Result queryTimetableByClassNo(List<Timetable> timetableList);
 }

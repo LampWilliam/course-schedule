@@ -1,5 +1,6 @@
 package com.courseschedule.entity;
 
+import cn.afterturn.easypoi.excel.annotation.Excel;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -41,71 +42,85 @@ public class Task implements Serializable {
     /**
      * 班级编号
      */
+    @Excel(name = "班级编号")
     private String classNo;
 
     /**
      * 教师编号
      */
+    @Excel(name = "教师编号")
     private String teacherNo;
 
     /**
      * 课程编号
      */
+    @Excel(name = "课程编号")
     private String courseNo;
 
     /**
      * 课程属性 01理论 02实验 03实践 04体育课
      */
+    @Excel(name = "课程属性")
     private String courseAttr;
 
     /**
      * 周数
      */
+    @Excel(name = "周数")
     private Integer weeksSum;
 
     /**
      * 周学时 - 必须是2的倍数
      */
+    @Excel(name = "周学时")
     private Integer weeksNumber;
 
     /**
      * 开始周
      */
+    @Excel(name = "开始周")
     private String startWeek;
 
     /**
      * 结束周
      */
+    @Excel(name = "结束周")
     private String endWeek;
 
     /**
      * 单双周 0代表非单双周 1代表单周 2代表双周
      */
+    @Excel(name = "单双周")
     private String biweekly;
 
     /**
      * 所在教学区域(教学楼、体育场等)编号
      */
+    @Excel(name = "所在教学区域编号")
     private String areaNo;
 
     /**
      * 同时上课班级数(>1为大班课)
      */
+    @Excel(name = "同时上课班级")
     private String classCount;
 
     /**
      * 班级名
      */
+    @Excel(name = "班级名")
     private String className;
 
     /**
      * 教师姓名
      */
+    @Excel(name = "教师名")
     private String teacherName;
 
     /**
      * 课程名
      */
+    @Excel(name = "课程名")
     private String courseName;
 
 

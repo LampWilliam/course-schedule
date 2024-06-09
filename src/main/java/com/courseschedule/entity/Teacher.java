@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * [input]教室
+ * 班级
  * </p>
  *
  * @author
@@ -28,58 +28,28 @@ import java.time.LocalDateTime;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class Room implements Serializable {
+public class Teacher implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * 教室id
+     * 教师id
      */
     @JsonSerialize(using = ToStringSerializer.class) //适应前端--字段类型从数值转换为字符串
     @TableId(value = "id", type = IdType.ASSIGN_ID) //雪花算法
     private Long id;
 
     /**
-     * 教室编号
+     * 教师编号
      */
-    @Excel(name = "教室编号")
-    private String roomNo;
+    @Excel(name = "教师编号")
+    private String teacherNo;
 
     /**
-     * 教室名称
+     * 教师名称
      */
-    @Excel(name = "教室名称")
-    private String roomName;
-
-    /**
-     * 所在教学区域(教学楼、体育场等)编号
-     */
-    @Excel(name = "所在教学区域编号")
-    private String areaNo;
-
-    /**
-     * 教学区域名
-     */
-    @Excel(name = "教学区域名")
-    private String areaName;
-
-    /**
-     * 教室人数容量
-     */
-    @Excel(name = "教室人数容量")
-    private Integer capacity;
-
-    /**
-     * 教室属性 01理论 02实验 03实践 04体育课
-     */
-    @Excel(name = "教室属性")
-    private String attr;
-
-    /**
-     * 备注
-     */
-    @Excel(name = "备注")
-    private String remark;
+    @Excel(name = "教师名称")
+    private String teacherName;
 
 
     /**

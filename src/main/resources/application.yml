@@ -3,7 +3,7 @@ spring:
         driver-class-name: com.mysql.cj.jdbc.Driver
         url: jdbc:mysql://localhost:3306/course_schedule?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowMultiQueries=true
         username: root
-        password: 123
+        password: root
         hikari:
             idle-timeout: 60000 # 空闲时间
             maximum-pool-size: 10 # 池中最大连接数（包括空闲和正在使用的连接）

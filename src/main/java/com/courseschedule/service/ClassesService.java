@@ -1,8 +1,10 @@
 package com.courseschedule.service;
 
 import com.courseschedule.common.lang.Result;
+import com.courseschedule.common.lang.ServerResponse;
 import com.courseschedule.entity.Classes;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * <p>
@@ -15,4 +17,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface ClassesService extends IService<Classes> {
 
     Result getList();
+
+    Result getClassNo();
 }

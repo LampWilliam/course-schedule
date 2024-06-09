@@ -2,8 +2,10 @@ package com.courseschedule.common.vo;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
-public class TimetableVo extends BaseVo {
+public class TimetableVo extends BaseVo implements Serializable {
     /**
      * id
      */
@@ -14,20 +16,27 @@ public class TimetableVo extends BaseVo {
      */
     private String classNo;
 
+
+
     /**
      * 课程编号
      */
     private String courseNo;
+
+
 
     /**
      * 讲师编号
      */
     private String teacherNo;
 
+
     /**
      * 教室编号
      */
     private String roomNo;
+
+
 
     /**
      * 上课时间(大节)
