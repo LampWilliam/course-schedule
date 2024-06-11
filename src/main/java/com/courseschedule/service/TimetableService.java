@@ -29,4 +29,6 @@ public interface TimetableService extends IService<Timetable> {
     Result getTimetableByClassNo(String classNo);
 
     Result queryTimetableByClassNo(List<Timetable> timetableList);
+
+    Result adjust(Long srcId, Integer destTimeslot);
 }

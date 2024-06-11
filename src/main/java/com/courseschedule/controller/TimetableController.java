@@ -1,25 +1,13 @@
 package com.courseschedule.controller;
 
 
-import cn.afterturn.easypoi.excel.ExcelExportUtil;
-import cn.afterturn.easypoi.excel.entity.ExportParams;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.courseschedule.common.lang.Result;
-import com.courseschedule.entity.Task;
 import com.courseschedule.entity.Timetable;
 import com.courseschedule.service.TimetableService;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.io.FileOutputStream;
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -81,6 +69,15 @@ public class TimetableController {
         return timetableService.rehearsalChangeTimeslot(id);
     }
 
+    /*****************************update*************************************/
+    @PutMapping("/adjust/{srcId}/{destTimeslot}")
+    public Result adjust(@PathVariable Long srcId, @PathVariable Integer destTimeslot) {
+        if (srcId == null || destTimeslot == null || destTimeslot == -1) {
+            return Result.error("手动调课参数有误");
+        }
+        return timetableService.adjust(srcId, destTimeslot);
+    }
+
 
     /*****************************getXxx getXxxList*************************************/
     /**
@@ -95,7 +92,7 @@ public class TimetableController {
      * 根据班级编号查找课表
      */
     @GetMapping("/class/{semesterId}/{classNo}")
-    public Result getClassTimetable(@PathVariable("semesterId") String semesterId,
+    public Result getClassTimetable(@PathVariable("semesterId") Long semesterId,
                                     @PathVariable("classNo") String classNo) {
         LambdaQueryWrapper<Timetable> wrapper = new LambdaQueryWrapper<Timetable>()
                 .eq(Timetable::getSemesterId, semesterId)
@@ -112,7 +109,7 @@ public class TimetableController {
      * 根据教室编号查找课表
      */
     @GetMapping("/room/{semesterId}/{roomNo}")
-    public Result getRoomTimetable(@PathVariable("semesterId") String semesterId,
+    public Result getRoomTimetable(@PathVariable("semesterId") Long semesterId,
                                     @PathVariable("roomNo") String roomNo) {
         LambdaQueryWrapper<Timetable> wrapper = new LambdaQueryWrapper<Timetable>()
                 .eq(Timetable::getSemesterId, semesterId)
@@ -129,7 +126,7 @@ public class TimetableController {
      * 根据教师编号查找课表
      */
     @GetMapping("/teacher/{semesterId}/{teacherNo}")
-    public Result getTeacherTimetable(@PathVariable("semesterId") String semesterId,
+    public Result getTeacherTimetable(@PathVariable("semesterId") Long semesterId,
                                    @PathVariable("teacherNo") String teacherNo) {
         LambdaQueryWrapper<Timetable> wrapper = new LambdaQueryWrapper<Timetable>()
                 .eq(Timetable::getSemesterId, semesterId)
@@ -141,22 +138,11 @@ public class TimetableController {
         }
         return timetableService.queryTimetableByClassNo(timetableList);
     }
-    // 查询所有班级课表(根据班级查找课表)
-    /**
-     * 查询开课任务
+
+    /** 查询开课任务
      */
     @GetMapping("/getList")
     public Result getList() {
         return timetableService.getList();
     }
-
-    // 根据教师编号查找课表
-    // 查询所有教师课表
-
-
-    // 根据教室编号查找课表
-    // 查询所有教室课表
-
-
-
 }

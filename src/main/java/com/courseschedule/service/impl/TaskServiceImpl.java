@@ -11,10 +11,7 @@ import com.courseschedule.entity.Room;
 import com.courseschedule.entity.Semester;
 import com.courseschedule.entity.Task;
 import com.courseschedule.entity.Timetable;
-import com.courseschedule.mapper.ClassesMapper;
-import com.courseschedule.mapper.RoomMapper;
-import com.courseschedule.mapper.TaskMapper;
-import com.courseschedule.mapper.TimetableMapper;
+import com.courseschedule.mapper.*;
 import com.courseschedule.service.TaskService;
 import com.courseschedule.utils.ClassUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +37,8 @@ import java.util.stream.Collectors;
 public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements TaskService {
 
     @Autowired
+    private SemesterMapper semesterMapper;
+    @Autowired
     private TaskMapper taskMapper;
     @Autowired
     private RoomMapper roomMapper;
@@ -52,12 +51,13 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
 
     /**
      * <h1>排课算法<h1/>
-     * @param semester 学期
+     * @param id 学期id
      */
     @Transactional(rollbackFor = Exception.class)//该方法中抛出Exception及其子类时，当前事务回滚
     @Override
-    public Result courseScheduling(Semester semester) {
+    public Result courseScheduling(Long id) {
         try {
+            Semester semester = semesterMapper.selectById(id);
             log.info("学期【" + semester.getSemesterName()
                     + "】，共" + semester.getSemesterWeeksSum() + "周");
             long start = System.currentTimeMillis();

@@ -12,6 +12,7 @@ import com.courseschedule.entity.User;
 import com.courseschedule.mapper.UserMapper;
 import com.courseschedule.service.UserService;
 import com.courseschedule.utils.JwtUtils;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -55,9 +56,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         UserDto userDto = new UserDto();
         BeanUtil.copyProperties(user, userDto);
-
+        userDto.setPassword("");
         return Result.success("登录成功", MapUtil.builder()
                 .put("userDto", userDto)
                 .map());
+    }
+
+    @Override
+    public Result logout() {
+        SecurityUtils.getSubject().logout();
+        return Result.success("退出成功");
     }
 }

@@ -5,6 +5,7 @@ import com.courseschedule.common.lang.Result;
 import com.courseschedule.common.vo.UserVo;
 import com.courseschedule.entity.User;
 import com.courseschedule.service.UserService;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -34,5 +35,10 @@ public class UserController {
     @PostMapping("/login")
     public Result login(HttpServletResponse response, @Validated @RequestBody UserVo vo) {
         return userService.login(response, vo);
+    }
+
+    @GetMapping("/logout")
+    public Result logout() {
+        return userService.logout();
     }
 }

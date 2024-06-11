@@ -1,7 +1,7 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : root
+Source Server         : jh
 Source Server Version : 50612
 Source Host           : localhost:3306
 Source Database       : course_schedule
@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50612
 File Encoding         : 65001
 
-Date: 2024-05-23 23:56:13
+Date: 2024-06-10 17:41:01
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -36,6 +36,32 @@ CREATE TABLE `classes` (
 -- Records of classes
 -- ----------------------------
 INSERT INTO `classes` VALUES ('1', '00000001', '1班', '48', null, null, null, null, '0');
+INSERT INTO `classes` VALUES ('1797471624652414977', '00000002', '2班', '50', null, '2024-06-03 11:33:25', null, '2024-06-03 11:33:25', '0');
+INSERT INTO `classes` VALUES ('1797471624652414978', '00000003', '3班', '50', null, '2024-06-03 11:33:25', null, '2024-06-03 11:33:25', '0');
+INSERT INTO `classes` VALUES ('1798381706261049345', '00000004', '4班', '50', null, '2024-06-05 23:49:45', null, '2024-06-05 23:49:45', '0');
+INSERT INTO `classes` VALUES ('1798381706261049346', '00000005', '5班', '50', null, '2024-06-05 23:49:45', null, '2024-06-05 23:49:45', '0');
+
+-- ----------------------------
+-- Table structure for course
+-- ----------------------------
+DROP TABLE IF EXISTS `course`;
+CREATE TABLE `course` (
+  `id` bigint(20) NOT NULL COMMENT 'id',
+  `course_no` varchar(8) NOT NULL COMMENT '课程编号',
+  `course_name` varchar(36) NOT NULL COMMENT '课程名',
+  `course_attr` varchar(2) NOT NULL COMMENT '课程属性',
+  `remark` varchar(100) DEFAULT NULL COMMENT '备注',
+  `created_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updated_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+  `is_deleted` tinyint(1) DEFAULT '0' COMMENT '逻辑删除',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+
+-- ----------------------------
+-- Records of course
+-- ----------------------------
+INSERT INTO `course` VALUES ('1', '20200101', '高数', '01', null, '2024-05-29 11:28:01', null, '0');
+INSERT INTO `course` VALUES ('2', '20200201', 'Java', '01', null, '2024-06-08 17:35:33', null, '0');
 
 -- ----------------------------
 -- Table structure for room
@@ -65,6 +91,8 @@ INSERT INTO `room` VALUES ('1', '00000001', '明理1', '01', '北教', '50', '01
 INSERT INTO `room` VALUES ('2', '00000002', '明理2', '02', '明理楼', '50', '01', null, null, '2024-05-19 22:29:40', null, '2024-05-21 20:53:56', '0');
 INSERT INTO `room` VALUES ('3', '00000003', '明理3', '01', '北教', '30', '01', null, null, '2024-05-19 22:29:40', null, '2024-05-21 19:31:35', '0');
 INSERT INTO `room` VALUES ('4', '00000004', '明理4', '01', '北教', '50', '02', null, null, '2024-05-19 22:29:40', null, '2024-05-21 19:31:43', '0');
+INSERT INTO `room` VALUES ('1797475798500864002', '00000005', '明理5', '02', '明理楼', '50', '02', null, null, '2024-06-03 11:50:00', null, '2024-06-03 11:50:00', '0');
+INSERT INTO `room` VALUES ('1797475798500864003', '00000006', '明理6', '02', '明理楼', '50', '01', null, null, '2024-06-03 11:50:00', null, '2024-06-03 11:50:00', '0');
 
 -- ----------------------------
 -- Table structure for semester
@@ -88,10 +116,8 @@ CREATE TABLE `semester` (
 -- ----------------------------
 -- Records of semester
 -- ----------------------------
-INSERT INTO `semester` VALUES ('1', '2023-2024学年 第1学期', '20', '2023-09-03', '2024-01-21', '0', null, '2024-05-20 14:30:35', '1', '2024-05-20 14:45:07', '0');
+INSERT INTO `semester` VALUES ('1', '2023-2024学年 第1学期', '20', '2023-09-03', '2024-01-21', '1', null, '2024-05-20 14:30:35', '1', '2024-06-09 13:49:49', '0');
 INSERT INTO `semester` VALUES ('2', '2023-2024学年 第2学期', '20', '2024-03-03', '2024-07-21', '0', null, '2024-05-20 14:31:30', '1', '2024-05-20 14:45:15', '0');
-INSERT INTO `semester` VALUES ('1792525112327553026', 'test2', '12', '2024-05-05', '2024-07-28', '0', null, '2024-05-20 19:57:44', '1', '2024-05-20 23:29:34', '0');
-INSERT INTO `semester` VALUES ('1792565727375486977', 'test13', '2', '2024-05-05', '2024-05-19', '0', '1', '2024-05-20 22:39:08', '1', '2024-05-20 23:29:35', '0');
 
 -- ----------------------------
 -- Table structure for task
@@ -124,8 +150,30 @@ CREATE TABLE `task` (
 -- ----------------------------
 -- Records of task
 -- ----------------------------
-INSERT INTO `task` VALUES ('1', '00000001', '00000001', '00000001', '01', '01', '01', '0', '01', '1', '1', '4', '1班', '张三', '高数', null, '2024-05-19 22:36:10', null, '2024-05-21 15:40:41', '0');
-INSERT INTO `task` VALUES ('2', '00000001', '00000002', '00000002', '01', '01', '01', '0', '01', '1', '1', '4', '1班', '李四', 'JAVA', null, '2024-05-19 22:36:10', null, '2024-05-21 15:40:46', '0');
+INSERT INTO `task` VALUES ('1795658325170343937', '00000001', '00000001', '20200101', '01', '01', '09', '0', '01', '1', '4', '10', '1班', '张三', '高数', null, '2024-05-29 11:28:01', null, '2024-05-29 11:28:01', '0');
+INSERT INTO `task` VALUES ('1795658325170343938', '00000002', '00000001', '20200201', '01', '01', '09', '0', '01', '1', '4', '10', '1班', '张三', 'Java', null, '2024-05-29 11:28:01', null, '2024-06-09 15:43:13', '0');
+
+-- ----------------------------
+-- Table structure for teacher
+-- ----------------------------
+DROP TABLE IF EXISTS `teacher`;
+CREATE TABLE `teacher` (
+  `id` bigint(20) NOT NULL,
+  `teacher_no` varchar(8) NOT NULL,
+  `teacher_name` varchar(36) NOT NULL,
+  `created_by` bigint(20) DEFAULT NULL COMMENT '创建人',
+  `created_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updated_by` bigint(20) DEFAULT NULL COMMENT '更新人',
+  `updated_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `is_deleted` int(11) DEFAULT '0' COMMENT '0未删除（默认），1已删除',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of teacher
+-- ----------------------------
+INSERT INTO `teacher` VALUES ('1', '00000001', '张三', null, '2024-06-09 15:43:33', null, '2024-06-09 15:43:33', '0');
+INSERT INTO `teacher` VALUES ('2', '00000002', '李四', null, '2024-06-09 15:45:13', null, '2024-06-09 15:45:13', '0');
 
 -- ----------------------------
 -- Table structure for timetable
@@ -153,12 +201,16 @@ CREATE TABLE `timetable` (
 -- ----------------------------
 -- Records of timetable
 -- ----------------------------
-INSERT INTO `timetable` VALUES ('1', '1', '', '1', '1', '1', '1', '1', '0', '1', null, '2024-05-19 22:39:00', null, '2024-05-23 14:19:41', '0');
-INSERT INTO `timetable` VALUES ('2', '8', '', '1', '1', '1', '1', '1', '0', '2', null, '2024-05-19 22:39:00', null, '2024-05-23 15:08:25', '0');
-INSERT INTO `timetable` VALUES ('3', '2', '', '1', '2', '1', '1', '1', '0', '1', null, '2024-05-19 22:39:00', null, '2024-05-23 14:19:43', '0');
-INSERT INTO `timetable` VALUES ('4', '2', '', '2', '1', '1', '1', '1', '0', '1', null, '2024-05-19 22:39:00', null, '2024-05-23 14:19:44', '0');
-INSERT INTO `timetable` VALUES ('5', '3', '', '1', '3', '1', '2', '2', '0', '1', null, '2024-05-23 13:55:09', null, '2024-05-23 15:06:06', '0');
-INSERT INTO `timetable` VALUES ('6', '99', '', '99', '99', '23', '1', '1', '0', '1', null, '2024-05-23 22:13:31', null, '2024-05-23 22:15:12', '0');
+INSERT INTO `timetable` VALUES ('1799717246113775618', '00000002', '20200201', '00000001', '00000001', '16', '1', '9', '0', '1', null, '2024-06-09 16:16:43', null, '2024-06-09 16:37:17', '0');
+INSERT INTO `timetable` VALUES ('1799717246113775619', '00000002', '20200201', '00000001', '00000001', '21', '1', '9', '0', '1', null, '2024-06-09 16:16:43', null, '2024-06-09 16:37:17', '0');
+INSERT INTO `timetable` VALUES ('1799717246113775620', '00000002', '20200201', '00000001', '00000001', '6', '1', '9', '0', '1', null, '2024-06-09 16:16:43', null, '2024-06-09 16:37:18', '0');
+INSERT INTO `timetable` VALUES ('1799717246113775621', '00000002', '20200201', '00000001', '00000001', '18', '1', '9', '0', '1', null, '2024-06-09 16:16:43', null, '2024-06-09 16:37:18', '0');
+INSERT INTO `timetable` VALUES ('1799717246113775622', '00000002', '20200201', '00000001', '00000001', '10', '1', '9', '0', '1', null, '2024-06-09 16:16:43', null, '2024-06-09 16:37:19', '0');
+INSERT INTO `timetable` VALUES ('1799717246113775623', '00000001', '20200101', '00000001', '00000001', '1', '1', '9', '0', '1', null, '2024-06-09 16:16:43', null, '2024-06-09 16:37:20', '0');
+INSERT INTO `timetable` VALUES ('1799717246113775624', '00000001', '20200101', '00000001', '00000001', '12', '1', '9', '0', '1', null, '2024-06-09 16:16:43', null, '2024-06-09 16:37:20', '0');
+INSERT INTO `timetable` VALUES ('1799717246180884482', '00000001', '20200101', '00000001', '00000001', '8', '1', '9', '0', '1', null, '2024-06-09 16:16:43', null, '2024-06-09 16:37:21', '0');
+INSERT INTO `timetable` VALUES ('1799717246180884483', '00000001', '20200101', '00000001', '00000001', '17', '1', '9', '0', '1', null, '2024-06-09 16:16:43', null, '2024-06-09 16:37:21', '0');
+INSERT INTO `timetable` VALUES ('1799717246180884484', '00000001', '20200101', '00000001', '00000001', '4', '1', '9', '0', '1', null, '2024-06-09 16:16:43', null, '2024-06-09 16:37:23', '0');
 
 -- ----------------------------
 -- Table structure for timetable_rehearsal

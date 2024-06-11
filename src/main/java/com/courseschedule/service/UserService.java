@@ -18,4 +18,6 @@ import javax.servlet.http.HttpServletResponse;
 public interface UserService extends IService<User> {
 
     Result login(HttpServletResponse response, UserVo vo);
+
+    Result logout();
 }

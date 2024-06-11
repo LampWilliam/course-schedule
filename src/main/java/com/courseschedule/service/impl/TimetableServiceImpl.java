@@ -5,16 +5,11 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.courseschedule.common.dto.TimeTableClassDto;
 import com.courseschedule.common.dto.TimetableDto;
 import com.courseschedule.common.lang.Result;
-import com.courseschedule.common.lang.ServerResponse;
 import com.courseschedule.common.vo.BaseVo;
-import com.courseschedule.common.vo.TimetableVo;
 import com.courseschedule.entity.*;
 import com.courseschedule.mapper.TimetableMapper;
 import com.courseschedule.mapper.TimetableRehearsalMapper;
-import com.courseschedule.service.ClassesService;
-import com.courseschedule.service.CourseService;
-import com.courseschedule.service.RoomService;
-import com.courseschedule.service.TimetableService;
+import com.courseschedule.service.*;
 import com.courseschedule.utils.ClassUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +44,8 @@ public class TimetableServiceImpl extends ServiceImpl<TimetableMapper, Timetable
     private CourseService courseService;
     @Resource
     private ClassesService classesService;
+    @Resource
+    private TeacherService teacherService;
 
     /*****************************手动排课的冲突检查*************************************/
     @Override
@@ -97,13 +94,18 @@ public class TimetableServiceImpl extends ServiceImpl<TimetableMapper, Timetable
     public Result rehearsalChangeTimeslot(Long id) {
         Timetable timetable = super.getById(id);
         if (timetable == null || timetable.getIsDeleted().equals(BaseVo.DELETED)) {
+            System.out.println("into this");
             Result.error("待查询课表字段不存在！");
         }
 
         // 4.1 清空演练表
         timetableRehearsalMapper.deleteAll();
         // 4.2 准备排练数据
-        timetableRehearsalMapper.insertRehearsalData(timetable.getSemesterId());
+        System.out.println(timetableRehearsalMapper);
+        Long semesterId = timetable.getSemesterId();
+
+        System.out.println(semesterId);
+        timetableRehearsalMapper.insertRehearsalData(semesterId);// 空指针异常
         // 4.3 JAVA那边写循环
         int timeslot1 = timetable.getTimeslot();
         List list = new ArrayList<Integer>();
@@ -137,11 +139,13 @@ public class TimetableServiceImpl extends ServiceImpl<TimetableMapper, Timetable
         List<String> classNos = timetableList.stream().map(Timetable::getClassNo).distinct().collect(Collectors.toList());
         List<String> courseNos = timetableList.stream().map(Timetable::getCourseNo).distinct().collect(Collectors.toList());
         List<String> roomNos = timetableList.stream().map(Timetable::getRoomNo).distinct().collect(Collectors.toList());
+        List<String> teacherNos = timetableList.stream().map(Timetable::getTeacherNo).distinct().collect(Collectors.toList());
 
         // 查询班级、课程、教室信息
         List<Classes> classes = classesService.list(new LambdaQueryWrapper<Classes>().in(Classes::getClassNo, classNos));
         List<Course> courseInfos = courseService.list(new LambdaQueryWrapper<Course>().in(Course::getCourseNo, courseNos));
         List<Room> rooms = roomService.list(new LambdaQueryWrapper<Room>().in(Room::getRoomNo, roomNos));
+        List<Teacher> teachers = teacherService.list(new LambdaQueryWrapper<Teacher>().in(Teacher::getTeacherNo, teacherNos));
 
         List<TimeTableClassDto> timeTableClassDtos = new LinkedList<>();
         timetableList.forEach(v -> {
@@ -151,9 +155,11 @@ public class TimetableServiceImpl extends ServiceImpl<TimetableMapper, Timetable
 
             // 根据教师编号找到教师名称
             classes.stream().filter(t -> t.getClassNo().equals(v.getClassNo())).findFirst().ifPresent(t -> timeTableClassDto.setClassName(t.getClassName()));
+            classes.stream().filter(c -> c.getClassNo().equals(v.getClassNo())).findFirst().ifPresent(c -> timeTableClassDto.setSize(c.getSize()));
             courseInfos.stream().filter(c -> c.getCourseNo().equals(v.getCourseNo())).findFirst().ifPresent(c -> timeTableClassDto.setCourseName(c.getCourseName()));
             rooms.stream().filter(r -> r.getRoomNo().equals(v.getRoomNo())).findFirst().ifPresent(r -> timeTableClassDto.setRoomName(r.getRoomName()));
             rooms.stream().filter(r -> r.getRoomNo().equals(v.getRoomNo())).findFirst().ifPresent(r -> timeTableClassDto.setAreaName(r.getAreaName()));
+            teachers.stream().filter(t -> t.getTeacherNo().equals(v.getTeacherNo())).findFirst().ifPresent(t -> timeTableClassDto.setTeacherName(t.getTeacherName()));
             timeTableClassDtos.add(timeTableClassDto);
         });
 
@@ -173,11 +179,14 @@ public class TimetableServiceImpl extends ServiceImpl<TimetableMapper, Timetable
         List<String> classNos = timetableList.stream().map(Timetable::getClassNo).distinct().collect(Collectors.toList());
         List<String> courseNos = timetableList.stream().map(Timetable::getCourseNo).distinct().collect(Collectors.toList());
         List<String> roomNos = timetableList.stream().map(Timetable::getRoomNo).distinct().collect(Collectors.toList());
+        List<String> teacherNos = timetableList.stream().map(Timetable::getTeacherNo).distinct().collect(Collectors.toList());
+
 
         // 查询班级、课程、教室信息
         List<Classes> classes = classesService.list(new LambdaQueryWrapper<Classes>().in(Classes::getClassNo, classNos));
         List<Course> courseInfos = courseService.list(new LambdaQueryWrapper<Course>().in(Course::getCourseNo, courseNos));
         List<Room> rooms = roomService.list(new LambdaQueryWrapper<Room>().in(Room::getRoomNo, roomNos));
+        List<Teacher> teachers = teacherService.list(new LambdaQueryWrapper<Teacher>().in(Teacher::getTeacherNo, teacherNos));
 
         List<TimeTableClassDto> timeTableClassDtos = new LinkedList<>();
         timetableList.forEach(v -> {
@@ -187,15 +196,25 @@ public class TimetableServiceImpl extends ServiceImpl<TimetableMapper, Timetable
 
             // 根据教师编号找到教师名称
             classes.stream().filter(t -> t.getClassNo().equals(v.getClassNo())).findFirst().ifPresent(t -> timeTableClassDto.setClassName(t.getClassName()));
+            classes.stream().filter(c -> c.getClassNo().equals(v.getClassNo())).findFirst().ifPresent(c -> timeTableClassDto.setSize(c.getSize()));
             courseInfos.stream().filter(c -> c.getCourseNo().equals(v.getCourseNo())).findFirst().ifPresent(c -> timeTableClassDto.setCourseName(c.getCourseName()));
             rooms.stream().filter(r -> r.getRoomNo().equals(v.getRoomNo())).findFirst().ifPresent(r -> timeTableClassDto.setRoomName(r.getRoomName()));
             rooms.stream().filter(r -> r.getRoomNo().equals(v.getRoomNo())).findFirst().ifPresent(r -> timeTableClassDto.setAreaName(r.getAreaName()));
+            teachers.stream().filter(t -> t.getTeacherNo().equals(v.getTeacherNo())).findFirst().ifPresent(t -> timeTableClassDto.setTeacherName(t.getTeacherName()));
             timeTableClassDtos.add(timeTableClassDto);
         });
 
         return Result.success("查询班级课表成功",timeTableClassDtos);
     }
-    /***************************** others *************************************/
 
-
+    @Override
+    public Result adjust(Long srcId, Integer destTimeslot) {
+        Timetable timetable = super.getById(srcId);
+        if(timetable==null || timetable.getIsDeleted().equals(BaseVo.DELETED)) {
+            return Result.error("待调整课程不存在");
+        }
+        timetable.setTimeslot(destTimeslot);
+        boolean b = super.updateById(timetable);
+        return b ? Result.success("调整课表成功") : Result.error("调整课表失败");
+    }
 }

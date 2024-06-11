@@ -34,7 +34,7 @@
     </select>
 
     <select id="getConfilctList" resultType="com.courseschedule.common.dto.TimetableDto">
-        SELECT '班级冲突' AS conflict_type, t2.*
+        SELECT '同班级同时间多次上课冲突' AS conflict_type, t2.*
         FROM timetable t1, timetable t2
         WHERE t1.semester_id = t2.semester_id
         AND t1.is_deleted = t2.is_deleted
@@ -43,7 +43,7 @@
         AND t1.id != t2.id -- 不同任务
         AND t1.id = #{id}
         UNION
-        SELECT '教师冲突' AS conflict_type, t2.*
+        SELECT '同教师同时间多次教学冲突' AS conflict_type, t2.*
         FROM timetable t1, timetable t2
         WHERE t1.semester_id = t2.semester_id
         AND t1.is_deleted = t2.is_deleted
@@ -52,7 +52,7 @@
         AND t1.id != t2.id -- 不同任务
         AND t1.id = #{id}
         UNION
-        SELECT '教室冲突' AS conflict_type, t2.*
+        SELECT '同教室同时间多次使用冲突' AS conflict_type, t2.*
         FROM timetable t1, timetable t2
         WHERE t1.semester_id = t2.semester_id
         AND t1.is_deleted = t2.is_deleted
