@@ -86,13 +86,15 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
             // 7. 解码
             List<Timetable> timetableList = decoding(resultList);
             // 8. 课程表写入数据库
-            timetableMapper.deleteAll();
+            timetableMapper.deleteAll(semester.getId());
             for (Timetable timetable : timetableList) {
                 timetable.setSemesterId(semester.getId());
                 timetableMapper.insert(timetable);
             }
             long timeConsume = System.currentTimeMillis() - start;
             log.info("完成自动排课,耗时:" + timeConsume);
+            semester.setSemesterStatus(1);
+            semesterMapper.updateById(semester);
             return Result.success(String.format("自动排课成功,耗时:%sms", timeConsume));
         } catch (Exception e) {
             return Result.error("自动排课失败,出现异常!");

@@ -3,7 +3,8 @@ package com.courseschedule.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.courseschedule.common.dto.TimetableDto;
 import com.courseschedule.entity.Timetable;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -18,8 +19,8 @@ import java.util.List;
 public interface TimetableMapper extends BaseMapper<Timetable> {
 
     // truncate会重置auto_increment（自增序列）的值为1
-    @Update("truncate timetable")
-    void deleteAll();
+    @Delete("delete from timetable where semester_id=#{semesterId}")
+    void deleteAll(@Param("semesterId") Long semesterId);
 
     // 1
     List<String> getConflictingColumnNameList(Long semesterId, String columnName);
