@@ -1,7 +1,8 @@
 package com.courseschedule.entity;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
@@ -21,6 +22,10 @@ import java.time.LocalDateTime;
 @Accessors(chain = true)
 public class Course implements Serializable{
     private static final long serialVersionUID=1L;
+
+    @JsonSerialize(using = ToStringSerializer.class) //适应前端--字段类型从数值转换为字符串
+    @TableId(value = "id", type = IdType.ASSIGN_ID) //雪花算法
+    private Long id;
 
     /**
      * 课程编号
