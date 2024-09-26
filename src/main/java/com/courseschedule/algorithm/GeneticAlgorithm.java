@@ -160,6 +160,7 @@ public class GeneticAlgorithm {
         }
         return resultGeneList;
     }
+
     /**
      * 冲突消除,同一个讲师同一时间上多门课。 <br/>
      * 解决：重新分配一个时间，直到所有的基因编码中不再存在上课时间冲突为止 <br/>
@@ -240,6 +241,5 @@ public class GeneticAlgorithm {
             }
         }
     }
-
 
 }
