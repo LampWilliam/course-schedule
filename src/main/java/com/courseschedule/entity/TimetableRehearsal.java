@@ -1,6 +1,8 @@
 package com.courseschedule.entity;
 
 import java.io.Serializable;
+
+import cn.afterturn.easypoi.excel.annotation.Excel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -59,6 +61,11 @@ public class TimetableRehearsal implements Serializable {
      * 单双周 0代表非单双周 1代表单周 2代表双周
      */
     private Integer biweekly;
+
+    /**
+     * 连排节次，只能有2或4
+     */
+    private String duration;
 
 
 }

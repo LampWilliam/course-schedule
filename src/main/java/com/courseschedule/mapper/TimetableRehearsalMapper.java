@@ -19,6 +19,7 @@ public interface TimetableRehearsalMapper extends BaseMapper<TimetableRehearsal>
     void deleteAll();
 
     @Insert("INSERT INTO timetable_rehearsal " +
+            "(id, class_no, teacher_no, room_no, timeslot, start_week, end_week, biweekly) " +
             "SELECT id, class_no, teacher_no, room_no, timeslot, start_week, end_week, biweekly " +
             "FROM timetable " +
             "WHERE semester_id = #{semesterId} AND is_deleted=0")

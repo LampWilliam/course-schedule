@@ -12,6 +12,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import javax.validation.groups.Default;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -81,4 +82,11 @@ public class Teacher implements Serializable {
      */
     private Integer isDeleted;
 
+    public interface Add extends Default {
+
+    }
+
+    public interface Update extends Default {
+
+    }
 }

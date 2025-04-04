@@ -2,8 +2,11 @@ package com.courseschedule.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.courseschedule.common.lang.Result;
-import com.courseschedule.entity.Classes;
 import com.courseschedule.entity.Teacher;
+import com.courseschedule.entity.TeacherComment;
+
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * <p>
@@ -16,4 +19,23 @@ import com.courseschedule.entity.Teacher;
 public interface TeacherService extends IService<Teacher> {
 
     Result getList();
+
+    //新增老师
+    void add(Teacher teacher);
+
+    //更新老师信息
+    void update(Teacher teacher);
+
+    //删除老师
+    void delete(Long id);
+
+    //根据老师名查询老师
+    Teacher findByTeacherName(String teacherName);
+
+
+    //根据教师id查找教师编号
+    String getClassNo(String teacherId);
+
+    //获取教师评价
+    List<TeacherComment> getTeacherComment(String teacherNo);
 }

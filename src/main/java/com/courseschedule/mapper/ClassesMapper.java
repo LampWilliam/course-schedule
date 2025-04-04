@@ -39,4 +39,9 @@ public interface ClassesMapper extends BaseMapper<Classes> {
     @Update("update classes set class_name = #{className},size = #{size} where class_no = #{classNo}")
     void updateClasses(String classNo, @Param("className") String className, @Param("size") int size);
 
+    @Select("select fix_room_no from classes where class_no=#{classNo}")
+    String selectFixRoomNo(String classNo);
+
+    @Select("select class_no from classes where class_name=#{className}")
+    String selectClassNo(String className);
 }

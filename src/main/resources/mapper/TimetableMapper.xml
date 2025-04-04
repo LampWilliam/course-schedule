@@ -60,5 +60,25 @@
         AND (t1.timeslot = t2.timeslot AND (t1.start_week&lt;=t2.end_week AND t2.start_week&lt;= t1.end_week) AND t1.biweekly+t2.biweekly != 3) -- 同时
         AND t1.id != t2.id -- 不同任务
         AND t1.id = #{id}
+        UNION
+        SELECT '该班级此时间段禁排' AS conflict_type, t.*
+        FROM timetable t
+        JOIN exclusion_rule er WHERE t.timeslot = er.timeslot AND t.class_no = er.class_no
+        AND t.id = #{id}
+        UNION
+        SELECT '该教室此时间段禁排' AS conflict_type, t.*
+        FROM timetable t
+        JOIN exclusion_rule er WHERE t.timeslot = er.timeslot AND t.room_no = er.room_no
+        AND t.id = #{id}
+        UNION
+        SELECT '该课程此时间段禁排' AS conflict_type, t.*
+        FROM timetable t
+        JOIN exclusion_rule er WHERE t.timeslot = er.timeslot AND t.course_no = er.course_no
+        AND t.id = #{id}
+        UNION
+        SELECT '该教室此时间段禁排' AS conflict_type, t.*
+        FROM timetable t
+        JOIN exclusion_rule er WHERE t.timeslot = er.timeslot AND t.teacher_no = er.teacher_no
+        AND t.id = #{id}
     </select>
 </mapper>

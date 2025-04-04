@@ -2,11 +2,13 @@ package com.courseschedule.controller;
 
 
 import com.courseschedule.common.lang.Result;
+import com.courseschedule.entity.Room;
+import com.courseschedule.entity.Teacher;
 import com.courseschedule.service.RoomService;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
@@ -25,5 +27,26 @@ public class RoomController {
     @GetMapping("/getList")
     public Result getList() {
         return roomService.getList();
+    }
+
+    @RequiresAuthentication
+    @PostMapping
+    public Result add(@RequestBody @Validated(Room.Add.class) Room room) {
+        roomService.add(room);
+        return Result.success("添加成功");
+    }
+
+    @RequiresAuthentication
+    @PutMapping
+    public Result update(@RequestBody @Validated(Room.Update.class) Room room){
+        roomService.update(room);
+        return Result.success("修改成功");
+    }
+
+    @RequiresAuthentication
+    @DeleteMapping("/{id}")
+    public Result delete(@PathVariable Long id){
+        roomService.delete(id);
+        return Result.success("删除成功");
     }
 }

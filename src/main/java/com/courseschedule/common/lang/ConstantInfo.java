@@ -39,6 +39,11 @@ public interface ConstantInfo {
     String START_WEEK = "start_week";
     String END_WEEK = "end_week";
     String BIWEEKLY = "biweekly";
+    String DURATION = "duration";
+    String IFFIXROOM = "ifFixRoom";
+    String COURSEATTR = "courseAttr";
+    String TASKATTR = "taskAttr";
+    String COURSEDEPARTMENTNO = "courseDepartmentNo";
     String CLASS_COUNT = "class_count";
     String IS_FIX = "is_fix";
 
@@ -85,6 +90,11 @@ public interface ConstantInfo {
         put(AREA_NO, 2);
         put(CLASS_COUNT, 1);
         put(IS_FIX, 1);
+        put(IFFIXROOM, 1);
+        put(COURSEATTR, 2);
+        put(TASKATTR, 2);
+        put(COURSEDEPARTMENTNO, 2);
+        put(DURATION, 1);
         put(TIMESLOT, 2);
         put(ROOM_NO, 8);
     }};

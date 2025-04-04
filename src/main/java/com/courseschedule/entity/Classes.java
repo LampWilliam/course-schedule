@@ -28,6 +28,7 @@ import java.time.LocalDateTime;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
+//班级
 public class Classes implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -56,6 +57,12 @@ public class Classes implements Serializable {
      */
     @Excel(name = "班级人数")
     private Integer size;
+
+    /**
+     * 固定教室编号
+     */
+    @Excel(name = "固定教室编号")
+    private String fixRoomNo;
 
     /**
      * 创建人

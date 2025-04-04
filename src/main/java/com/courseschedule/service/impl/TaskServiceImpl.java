@@ -7,10 +7,7 @@ import com.courseschedule.common.exception.CourseArrangeException;
 import com.courseschedule.common.lang.ConstantInfo;
 import com.courseschedule.common.lang.Result;
 import com.courseschedule.common.vo.BaseVo;
-import com.courseschedule.entity.Room;
-import com.courseschedule.entity.Semester;
-import com.courseschedule.entity.Task;
-import com.courseschedule.entity.Timetable;
+import com.courseschedule.entity.*;
 import com.courseschedule.mapper.*;
 import com.courseschedule.service.TaskService;
 import com.courseschedule.utils.ClassUtil;
@@ -19,9 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -48,6 +43,8 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
     private TimetableMapper timetableMapper;
     @Autowired
     private GeneticAlgorithm geneticAlgorithm;
+    @Autowired
+    private ExclusionRuleMapper exclusionRuleMapper;
 
     /**
      * <h1>排课算法<h1/>
@@ -55,7 +52,7 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
      */
     @Transactional(rollbackFor = Exception.class)//该方法中抛出Exception及其子类时，当前事务回滚
     @Override
-    public Result courseScheduling(Long id) {
+    public Result courseScheduling(Long id,int ifScheduledInNight,int ifExpInNight) {
         try {
             Semester semester = semesterMapper.selectById(id);
             log.info("学期【" + semester.getSemesterName()
@@ -63,29 +60,33 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
             long start = System.currentTimeMillis();
             log.info("开始自动排课,时间:" + start);
             // 1. 获得排课任务表
-            List<Task> taskList = taskMapper.selectList(new LambdaQueryWrapper<Task>());
+            List<Task> taskList = taskMapper.selectList(new LambdaQueryWrapper<Task>()
+                    .eq(Task::isIfScheduled, true));
             if (null == taskList || taskList.isEmpty()) {
                 return Result.error("自动排课失败,查询不到排课任务!请导入排课任务再进行排课");
             }
-
-
             // 校验学时是否超过课表的容纳值
             checkWeeksNumber(taskList);
 
             // 2.3. 将开课任务的各项信息进行编码成染色体 - 同时随机分配时间
-            List<String> resultGeneList = coding(taskList);
+            List<String> resultGeneList = coding(taskList,ifScheduledInNight,ifExpInNight);
 
             // 4. 将分配好时间的基因编码以班级分类成为以班级的个体，得到班级的不冲突时间初始编码
             Map<String, List<String>> individualMap = geneticAlgorithm.transformIndividual(resultGeneList);
 
-            // 5. 遗传进化(这里面已经处理完上课时间)
-            individualMap = geneticAlgorithm.geneticEvolution(individualMap);
+            // 5.将分配好时间的基因编码以教师分类成为以教师的个体，得到各教师各个时间段的上课节数
+            Map<String,List<Integer>> teacherTimeslotNum = geneticAlgorithm.transformIndividualByTeacherNo(resultGeneList);
 
-            // 6. 分配教室并做教室冲突检测
+            // 6. 遗传进化(这里面已经将上课时间编入编码中)
+            individualMap = geneticAlgorithm.geneticEvolution(individualMap,teacherTimeslotNum,ifScheduledInNight,ifExpInNight);
+
+            // 7. 分配教室并做教室冲突检测
             List<String> resultList = assignRoom(individualMap);
-            // 7. 解码
-            List<Timetable> timetableList = decoding(resultList);
-            // 8. 课程表写入数据库
+            // 8.添加连排课程进去
+            List<String> afterAddresultGeneList = addDurationCourse(resultList);
+            // 9. 解码
+            List<Timetable> timetableList = decoding(afterAddresultGeneList);
+            // 10. 课程表写入数据库
             timetableMapper.deleteAll(semester.getId());
             for (Timetable timetable : timetableList) {
                 timetable.setSemesterId(semester.getId());
@@ -109,6 +110,44 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
         return Result.success("成功返回排课任务表", list);
     }
 
+    @Override
+    public void ifScheduled(Task task) {
+        taskMapper.ifScheduled(task);
+    }
+
+    @Override
+    public void ifFixRoom(Task task) {
+        taskMapper.ifFixRoom(task);
+    }
+
+    @Override
+    public Result getListByClassNo(String classNo) {
+        List<Task> list = taskMapper.getListByClassNo(classNo);
+        return Result.success("查询成功",list);
+    }
+
+    @Override
+    public void updateAll(boolean check) {
+        taskMapper.updateAll(check);
+    }
+
+    @Override
+    public void updateAllByClassNo(boolean check,String classNo) {
+        taskMapper.updateAllByClassNo(check,classNo);
+    }
+
+    @Override
+    public void updateFixAll(boolean check) {
+        taskMapper.updateFixAll(check);
+
+    }
+
+    @Override
+    public void updateFixAllByClassNo(boolean check, String classNo) {
+        taskMapper.updateFixAllByClassNo(check,classNo);
+
+    }
+
     private List<Timetable> decoding(List<String> resultList) {
         List<Timetable> timetableList = new ArrayList<>();
         for (String gene : resultList) {
@@ -121,20 +160,31 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
             timetable.setStartWeek(Integer.parseInt(ClassUtil.cutGene(ConstantInfo.START_WEEK, gene)));
             timetable.setEndWeek(Integer.parseInt(ClassUtil.cutGene(ConstantInfo.END_WEEK, gene)));
             timetable.setBiweekly(Integer.parseInt(ClassUtil.cutGene(ConstantInfo.BIWEEKLY, gene)));
+            timetable.setDuration(ClassUtil.cutGene(ConstantInfo.DURATION, gene));
             timetableList.add(timetable);
         }
         return timetableList;
     }
 
     /**
-     * @目的 开始给进化完的基因编码分配教室
-     * @方式 在原来的编码中加上教室编号
+     * 方式 开始给进化完的基因编码分配教室
+     * method 在原来的编码中加上教室编号
      */
     private List<String> assignRoom(Map<String, List<String>> individualMap) {
         List<String> resultList = new ArrayList<>();
         List<String> resultGeneList = geneticAlgorithm.collectGene(individualMap);
         String RoomNo = "";
         for (String gene : resultGeneList) {
+            String ifFixRoom = ClassUtil.cutGene(ConstantInfo.IFFIXROOM, gene);
+            if(ifFixRoom.equals("1")){
+                String classNo = ClassUtil.cutGene(ConstantInfo.CLASS_NO, gene);
+                RoomNo = classesMapper.selectFixRoomNo(classNo);
+                if(RoomNo != null){
+                    gene = gene + RoomNo;
+                    resultList.add(gene);
+                    continue;
+                }
+            }
             LambdaQueryWrapper<Room> wrapper = new LambdaQueryWrapper<>();
             wrapper.eq(Room::getAreaNo, ClassUtil.cutGene(ConstantInfo.AREA_NO, gene));
             wrapper.eq(Room::getAttr, ClassUtil.cutGene(ConstantInfo.COURSE_ATTR, gene));
@@ -159,19 +209,25 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
      * +areaNo(2)
      * +classCount(1)
      * +isFix(1)
+     * +ifFixRoom(1)
+     * +courseAttr(2)
+     * +taskAttr(2)
+     * +courseDepartmentNo(2)
+     * +连排节次(1)
      * +上课时间(2)     isFix=0时随机分配上课时间
-     * [+教室编号(8)]
-     *
+     * [+教室编号(20)]
      * 最新规则可见ConstantInfo.RULES
      */
-    private List<String> coding(List<Task> taskList) {
+    private List<String> coding(List<Task> taskList,int ifScheduledInNight,int ifExpInNight) {
         List<String> resultGeneList = new ArrayList<>();
         String isFix = "0"; // 之后有空再搞自定义固定上课时间
         for (Task task : taskList) {
-            // 1，不固定上课时间，默认默认不再填充 00
-            // 得到每周上课的节数，因为设定2学时为一节课
+            // 1，不固定上课时间，默认不再填充 00
+            // 得到每周上课的节数，因为设定两学时为一节课
             int size = task.getWeeksNumber() / 2;
             for (int i = 0; i < size; i++) {
+                boolean ifFixRoom = task.isIfFixRoom();
+                String ifFixRoomS = ifFixRoom ? "1" : "0";
                 String gene = task.getClassNo()     // 8
                             + task.getTeacherNo()   // 8
                             + task.getCourseNo()    // 8
@@ -182,7 +238,12 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
                             + task.getAreaNo()      // 2
                             + task.getClassCount()  // 1
                             + isFix                 // 1
-                            + ClassUtil.randomTime();// 2
+                            + ifFixRoomS            // 1
+                            + task.getCourseAttr()  // 2
+                            + task.getTaskAttr()    // 2
+                            + task.getCourseDepartmentNo()    // 2
+                            + task.getDuration()    // 1
+                            + ClassUtil.randomTime(ifScheduledInNight,task.getCourseAttr(),ifExpInNight);// 2
                 resultGeneList.add(gene);
             }
         }
@@ -264,12 +325,24 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
         if (resultList.isEmpty()) {
             return true;
         } else {
+            List<ExclusionRule> exRoomList = exclusionRuleMapper.getRoomList();
+            int timeslot = Integer.parseInt(ClassUtil.cutGene(ConstantInfo.TIMESLOT, gene));
             String roomNo1 = room.getRoomNo();
             String timeslot1 = ClassUtil.cutGene(ConstantInfo.TIMESLOT, gene);
             int startWeek1 = Integer.parseInt(ClassUtil.cutGene(ConstantInfo.START_WEEK, gene));
             int endWeek1 = Integer.parseInt(ClassUtil.cutGene(ConstantInfo.END_WEEK, gene));
             int biweekly1 = Integer.parseInt(ClassUtil.cutGene(ConstantInfo.BIWEEKLY, gene));
-
+            Set<Integer> forbiddenSlots = new HashSet<>();
+            // 判断是否是禁排节次
+            for(ExclusionRule rule : exRoomList) {
+                if(rule.getRoomNo().equals(roomNo1)) {
+                    forbiddenSlots.add(rule.getTimeslot());
+                }
+            }
+            if(forbiddenSlots.contains(timeslot)){
+                return false;
+            }
+            // 判断同一时间同一个教室是否有多个班级使用
             for (String resultGene : resultList) {
                 String roomNo2 = ClassUtil.cutGene(ConstantInfo.ROOM_NO, resultGene);
                 String timeslot2 = ClassUtil.cutGene(ConstantInfo.TIMESLOT, resultGene);
@@ -285,6 +358,26 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
             }
         }
         return true;
+    }
+
+    // 增加连排课程
+    private List<String> addDurationCourse(List<String> resultGeneList) {
+        List<String> afterAddresultGeneList = new ArrayList<>();
+        for (String gene : resultGeneList) {
+            if(ClassUtil.cutGene(ConstantInfo.DURATION, gene).equals("4")){
+                String roomNo = ClassUtil.cutGene(ConstantInfo.ROOM_NO, gene);
+                int timeslot = Integer.parseInt(ClassUtil.cutGene(ConstantInfo.TIMESLOT, gene));
+                int afterAddTimeslot = timeslot + 1;
+                String newTimeslot = afterAddTimeslot < 10 ? ("0" + afterAddTimeslot) : String.valueOf(afterAddTimeslot);
+                String newGene = gene.substring(0, ClassUtil.getTimeslotStartIndex()) + newTimeslot + roomNo;
+                afterAddresultGeneList.add(newGene);
+                afterAddresultGeneList.add(gene);
+            }else if(ClassUtil.cutGene(ConstantInfo.DURATION, gene).equals("2"))
+            {
+                afterAddresultGeneList.add(gene);
+            }
+        }
+        return afterAddresultGeneList;
     }
 }
 

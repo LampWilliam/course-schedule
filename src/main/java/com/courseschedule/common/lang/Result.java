@@ -1,5 +1,6 @@
 package com.courseschedule.common.lang;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -18,6 +19,7 @@ public class Result implements Serializable {
 
     private Integer code;
     private String msg;
+    @JsonTypeInfo(use = JsonTypeInfo.Id.NONE)
     private Object data;
 
     public static Result success(String msg, Object data) {

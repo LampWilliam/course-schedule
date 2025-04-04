@@ -36,11 +36,6 @@ public class RoomVo extends BaseVo {
     private Integer capacity;
 
     /**
-     * 教室属性 01理论 02实验 03实践 04体育课
-     */
-    private String attr;
-
-    /**
      * 备注
      */
     private String remark;

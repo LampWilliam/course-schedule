@@ -12,6 +12,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import javax.validation.groups.Default;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -28,6 +29,7 @@ import java.time.LocalDateTime;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
+//教室
 public class Room implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -110,5 +112,13 @@ public class Room implements Serializable {
      * 是否删除 0-未删除 1-已删除
      */
     private Integer isDeleted;
+
+    public interface Add extends Default {
+
+    }
+
+    public interface Update extends Default {
+
+    }
 
 }

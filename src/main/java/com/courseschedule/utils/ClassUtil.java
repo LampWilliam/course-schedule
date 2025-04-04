@@ -1,11 +1,19 @@
 package com.courseschedule.utils;
 
+import com.courseschedule.algorithm.GeneticAlgorithm;
 import com.courseschedule.common.lang.ConstantInfo;
+import com.courseschedule.entity.ExclusionRule;
+import com.courseschedule.mapper.ExclusionRuleMapper;
+import com.courseschedule.service.ExclusionRuleService;
+import com.courseschedule.service.impl.ExclusionRuleServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
 
 /**
  * 工具类
@@ -63,8 +71,23 @@ public class ClassUtil {
     /** 成随机时间
      * @return -> 两位时间
      **/
-    public static String randomTime() {
-        int temp = RANDOM.nextInt(MAX_WEEK_TIMESLOT) + 1;
+    public static String randomTime(int ifScheduledInNight,String CourseAttr,int ifExpInNight) {
+        int temp = RANDOM.nextInt(MAX_WEEK_TIMESLOT) ;
+        if(ifScheduledInNight == 0) {                               // 所有课都不允许晚上排
+            if(temp == 4 || temp == 9 || temp == 14 || temp == 19 || temp == 24) {
+                return randomTime(ifScheduledInNight,CourseAttr,ifExpInNight);
+            }
+        }
+        if(ifScheduledInNight == 1 && ifExpInNight == 1) {          // 所有课程都允许晚上排
+            return temp < 10 ? ("0" + temp) : String.valueOf(temp);
+        }else if(ifScheduledInNight == 1 && ifExpInNight == 0) {    // 除了实验课都允许晚上排
+            if(CourseAttr.equals("02")){
+                if(temp == 4 || temp == 9 || temp == 14 || temp == 19 || temp == 24) {
+                    return randomTime(ifScheduledInNight,CourseAttr,ifExpInNight);
+                }
+            }
+            return temp < 10 ? ("0" + temp) : String.valueOf(temp);
+        }
         return temp < 10 ? ("0" + temp) : String.valueOf(temp);
     }
 
@@ -72,7 +95,24 @@ public class ClassUtil {
     /** 生成 00 - 24 的时间集合
      * @return -> java.util.List<java.lang.String>
      **/
-    private static List<String> getAllTime() {
+    public static List<String> getAllTime(String courseAttr,int ifScheduledInNight,int ifExpInNight) {
+        if(ifScheduledInNight == 0) {
+            return IntStream.rangeClosed(0, MAX_WEEK_TIMESLOT)
+                    .filter(i -> i % 5 != 4) // 排除 i = 4, 9, 14, 19, 24
+                    .mapToObj(i -> i < 10 ? ("0" + i) : String.valueOf(i))
+                    .collect(Collectors.toList());
+        }
+        if(ifScheduledInNight == 1 && ifExpInNight == 1) {
+            return IntStream.rangeClosed(0, MAX_WEEK_TIMESLOT).mapToObj(i -> i < 10 ? ("0" + i) : String.valueOf(i)).collect(Collectors.toList());
+        } else if (ifScheduledInNight == 1 && ifExpInNight == 0) {
+            if(courseAttr.equals("02")){
+                return IntStream.rangeClosed(0, MAX_WEEK_TIMESLOT)
+                        .filter(i -> i % 5 != 4) // 排除 i = 4, 9, 14, 19, 24
+                        .mapToObj(i -> i < 10 ? ("0" + i) : String.valueOf(i))
+                        .collect(Collectors.toList());
+            }
+            return IntStream.rangeClosed(0, MAX_WEEK_TIMESLOT).mapToObj(i -> i < 10 ? ("0" + i) : String.valueOf(i)).collect(Collectors.toList());
+        }
         return IntStream.rangeClosed(0, MAX_WEEK_TIMESLOT).mapToObj(i -> i < 10 ? ("0" + i) : String.valueOf(i)).collect(Collectors.toList());
     }
 
@@ -84,7 +124,7 @@ public class ClassUtil {
      * @param classTime 上课时间
      * @return 未使用的时间
      **/
-    public static String randomTimeForClassConflict(String gene, List<String> geneList, String classNo, String teacherNo, String classTime) {
+    public static String randomTimeForClassConflict(String gene, List<String> geneList, String classNo, String teacherNo, String classTime,String courseAttr,int ifScheduledInNight,int ifExpInNight) {
         // 找出当前班级在 01-25 时间之间还未使用的时间
 
         Set<String> usedTimeList =
@@ -96,14 +136,14 @@ public class ClassUtil {
 
         log.debug("{} 班级 剩余空闲上课时间 {}", classNo, usedTimeList);
 
-        return getFreeTime(usedTimeList);
+        return getFreeTime(courseAttr,usedTimeList,ifScheduledInNight,ifExpInNight);
     }
 
     /**
      * 解决同一个teacher同时有两个timeslot在上课的冲突问题
      * @return 未使用的时间
      */
-    public static String randomTimeForTeacherConflict(String gene, List<String> geneList, String teacherNo, String classNo) {
+    public static String randomTimeForTeacherConflict(String gene, List<String> geneList, String teacherNo, String classNo,String courseAttr,int ifScheduledInNight,int ifExpInNight) {
         // 找出当前教师在 01-25 时间之间还未使用的时间
 
         // usedTimeList 存储了该教师已经使用的所有时间段
@@ -116,14 +156,14 @@ public class ClassUtil {
 
         log.debug("{} 讲师 已经用的上课时间 {}", teacherNo, usedTimeList);
 
-        return getFreeTime(usedTimeList);
+        return getFreeTime(courseAttr,usedTimeList,ifScheduledInNight,ifExpInNight);
     }
 
     /**
      * 获取 01-25 内还未使用的时间
      **/
-    private static String getFreeTime(Set<String> usedTimeList) {
-        List<String> allTime = getAllTime();
+    private static String getFreeTime(String courseAttr,Set<String> usedTimeList,int ifScheduledInNight,int ifExpInNight) {
+        List<String> allTime = getAllTime(courseAttr,ifScheduledInNight,ifExpInNight);
 
         boolean isRemoveSuccess = allTime.removeAll(usedTimeList);
 
@@ -132,29 +172,7 @@ public class ClassUtil {
             return allTime.get(randomIndex);
         }
 
-        return randomTime();
-    }
-
-    /**
-     * 计算每个个体的适应值
-     * 目的:进行软约束
-     */
-    public static double fitness(List<String> individualList) {
-        double K1 = 0.3;// 权重1 - 不是早八
-        double K2 = 0.7;// 权重2 - 不是晚课
-        int F1 = 0;
-        int F2 = 0;
-        double Fx = 0;// 总适应度
-        // 计算每一个个体的适应度
-        for (String gene : individualList) {
-            int timeslot = Integer.parseInt(cutGene(ConstantInfo.TIMESLOT, gene));
-            boolean isEarlyMorning = timeslot%5 == 0;
-            boolean isLateNight = timeslot%5 == 4;
-            if (!isEarlyMorning) F1++;
-            if (!isLateNight) F2++;
-        }
-        Fx = K1*F1 + K2*F2;
-        return Fx;
+        return randomTime(1,"01",1);
     }
 
     /**

@@ -32,12 +32,6 @@ CREATE TABLE `classes` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='班级';
 
--- ----------------------------
--- Records of classes
--- ----------------------------
-INSERT INTO `classes` VALUES ('1801139212498501633', '00000001', '1班', '50', null, '2024-06-13 14:27:06', null, '2024-06-13 14:27:06', '0');
-INSERT INTO `classes` VALUES ('1801139212498501634', '00000002', '2班', '50', null, '2024-06-13 14:27:06', null, '2024-06-13 14:27:06', '0');
-INSERT INTO `classes` VALUES ('1801139212565610497', '00000003', '3班', '50', null, '2024-06-13 14:27:06', null, '2024-06-13 14:27:06', '0');
 
 -- ----------------------------
 -- Table structure for course
@@ -47,29 +41,13 @@ CREATE TABLE `course` (
   `id` bigint(20) NOT NULL COMMENT 'id',
   `course_no` varchar(8) NOT NULL COMMENT '课程编号',
   `course_name` varchar(36) NOT NULL COMMENT '课程名',
-  `course_attr` varchar(2) NOT NULL COMMENT '课程属性',
+  `course_attr` varchar(2) NOT NULL COMMENT '学时类型编号 01理论 02实验 03实践 04体育课',
   `remark` varchar(100) DEFAULT NULL COMMENT '备注',
   `created_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `updated_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
   `is_deleted` tinyint(1) DEFAULT '0' COMMENT '逻辑删除',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
-
--- ----------------------------
--- Records of course
--- ----------------------------
-INSERT INTO `course` VALUES ('1', '20200101', '高数', '01', null, '2024-05-29 11:28:01', null, '0');
-INSERT INTO `course` VALUES ('2', '20200201', 'Java', '01', null, '2024-06-08 17:35:33', null, '0');
-INSERT INTO `course` VALUES ('3', '20200102', '大学英语', '01', null, '2024-06-11 14:02:11', '2024-06-11 14:02:11', '0');
-INSERT INTO `course` VALUES ('4', '20200202', '人工智能基础', '01', null, '2024-06-11 23:52:57', '2024-06-11 23:52:57', '0');
-INSERT INTO `course` VALUES ('5', '20200202', '人工智能基础', '02', null, '2024-06-11 23:53:34', '2024-06-11 23:53:34', '0');
-INSERT INTO `course` VALUES ('6', '20200203', '操作系统', '01', null, '2024-06-11 23:54:01', '2024-06-11 23:54:01', '0');
-INSERT INTO `course` VALUES ('7', '20200203', '操作系统', '02', null, '2024-06-11 23:54:22', '2024-06-11 23:54:22', '0');
-INSERT INTO `course` VALUES ('8', '20200204', 'Python程序语言设计', '01', null, '2024-06-11 23:54:43', '2024-06-11 23:54:43', '0');
-INSERT INTO `course` VALUES ('9', '20200204', 'Python程序语言设计', '02', null, '2024-06-11 23:55:03', '2024-06-11 23:55:03', '0');
-INSERT INTO `course` VALUES ('10', '20200205', 'J2EE架构与程序设计', '01', null, '2024-06-11 23:55:23', '2024-06-11 23:55:23', '0');
-INSERT INTO `course` VALUES ('11', '20200205', 'J2EE架构与程序设计', '02', null, '2024-06-11 23:55:39', '2024-06-11 23:55:39', '0');
-INSERT INTO `course` VALUES ('1801097140752142339', '99999999', '钢琴演奏', '02', null, '2024-06-13 11:39:55', '2024-06-13 11:39:55', '0');
 
 -- ----------------------------
 -- Table structure for room
@@ -91,25 +69,6 @@ CREATE TABLE `room` (
   `is_deleted` int(11) DEFAULT '0',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='[input]教室';
-
--- ----------------------------
--- Records of room
--- ----------------------------
-INSERT INTO `room` VALUES ('1801139250616336386', '20000001', '明理101', '02', '明理楼', '50', '01', null, null, '2024-06-13 14:27:15', null, '2024-06-13 14:27:15', '0');
-INSERT INTO `room` VALUES ('1801139250683445250', '20000002', '明理102', '02', '明理楼', '50', '01', null, null, '2024-06-13 14:27:15', null, '2024-06-13 14:27:15', '0');
-INSERT INTO `room` VALUES ('1801139250683445251', '20000003', '明理103', '02', '明理楼', '50', '01', null, null, '2024-06-13 14:27:15', null, '2024-06-13 14:27:15', '0');
-INSERT INTO `room` VALUES ('1801139250750554113', '20000004', '明理104', '02', '明理楼', '50', '02', null, null, '2024-06-13 14:27:15', null, '2024-06-13 14:27:15', '0');
-INSERT INTO `room` VALUES ('1801139250750554114', '20000005', '明理105', '02', '明理楼', '50', '02', null, null, '2024-06-13 14:27:15', null, '2024-06-13 14:27:15', '0');
-INSERT INTO `room` VALUES ('1801139250817662977', '20000006', '明理106', '02', '明理楼', '50', '02', null, null, '2024-06-13 14:27:15', null, '2024-06-13 14:27:15', '0');
-INSERT INTO `room` VALUES ('1801139250817662978', '10000001', '精工101', '01', '精工楼', '50', '01', null, null, '2024-06-13 14:27:15', null, '2024-06-13 14:27:15', '0');
-INSERT INTO `room` VALUES ('1801139250876383233', '10000002', '精工102', '01', '精工楼', '50', '01', null, null, '2024-06-13 14:27:15', null, '2024-06-13 14:27:15', '0');
-INSERT INTO `room` VALUES ('1801139250876383234', '10000003', '精工103', '01', '精工楼', '50', '01', null, null, '2024-06-13 14:27:15', null, '2024-06-13 14:27:15', '0');
-INSERT INTO `room` VALUES ('1801139250876383235', '10000004', '精工104', '01', '精工楼', '50', '02', null, null, '2024-06-13 14:27:15', null, '2024-06-13 14:27:15', '0');
-INSERT INTO `room` VALUES ('1801139250943492098', '10000005', '精工105', '01', '精工楼', '50', '02', null, null, '2024-06-13 14:27:15', null, '2024-06-13 14:27:15', '0');
-INSERT INTO `room` VALUES ('1801139250943492099', '10000006', '精工106', '01', '精工楼', '50', '02', null, null, '2024-06-13 14:27:15', null, '2024-06-13 14:27:15', '0');
-INSERT INTO `room` VALUES ('1801139251010600961', '30000001', '专业机房101', '03', '逸夫楼', '50', '02', null, null, '2024-06-13 14:27:15', null, '2024-06-13 14:27:15', '0');
-INSERT INTO `room` VALUES ('1801139251010600962', '30000002', '专业机房102', '03', '逸夫楼', '50', '02', null, null, '2024-06-13 14:27:15', null, '2024-06-13 14:27:15', '0');
-INSERT INTO `room` VALUES ('1801139251073515521', '30000003', '专业机房103', '03', '逸夫楼', '50', '02', null, null, '2024-06-13 14:27:15', null, '2024-06-13 14:27:15', '0');
 
 -- ----------------------------
 -- Table structure for semester
@@ -149,7 +108,7 @@ CREATE TABLE `task` (
   `class_no` varchar(8) NOT NULL COMMENT '班级编号',
   `teacher_no` varchar(8) NOT NULL COMMENT '教师编号',
   `course_no` varchar(8) NOT NULL COMMENT '课程编号',
-  `course_attr` varchar(2) DEFAULT NULL COMMENT '课程属性 01理论 02实验 03实践 04体育课',
+  `course_attr` varchar(2) DEFAULT NULL COMMENT '学时类型 01理论 02实验 03实践 04体育课',
   `start_week` varchar(2) DEFAULT NULL COMMENT '开始周',
   `end_week` varchar(2) DEFAULT NULL COMMENT '结束周',
   `biweekly` varchar(1) DEFAULT '0' COMMENT '单双周 0代表非单双周 1代表单周 2代表双周',
@@ -169,34 +128,6 @@ CREATE TABLE `task` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='[input]教学任务表(包括教学大纲，教师选课)';
 
 -- ----------------------------
--- Records of task
--- ----------------------------
-INSERT INTO `task` VALUES ('1801139136686456834', '00000001', '00000001', '20200202', '01', '01', '16', '0', '02', '1', '16', '2', '1班', '张三', '人工智能基础', null, '2024-06-13 14:26:48', null, '2024-06-13 14:26:48', '0');
-INSERT INTO `task` VALUES ('1801139136887783425', '00000001', '00000001', '20200202', '02', '01', '16', '1', '03', '1', '16', '2', '1班', '张三', '人工智能基础', null, '2024-06-13 14:26:48', null, '2024-06-13 14:26:48', '0');
-INSERT INTO `task` VALUES ('1801139136954892289', '00000001', '00000002', '20200203', '01', '01', '16', '0', '02', '2', '16', '2', '1班', '李四', '操作系统', null, '2024-06-13 14:26:48', null, '2024-06-13 14:26:48', '0');
-INSERT INTO `task` VALUES ('1801139137022001154', '00000001', '00000002', '20200203', '02', '01', '16', '2', '03', '1', '16', '2', '1班', '李四', '操作系统', null, '2024-06-13 14:26:48', null, '2024-06-13 14:26:48', '0');
-INSERT INTO `task` VALUES ('1801139137089110017', '00000001', '00000003', '20200204', '01', '01', '16', '0', '02', '1', '16', '2', '1班', '王五', 'Python程序语言设计', null, '2024-06-13 14:26:48', null, '2024-06-13 14:26:48', '0');
-INSERT INTO `task` VALUES ('1801139137156218882', '00000001', '00000003', '20200204', '02', '01', '16', '0', '03', '1', '16', '2', '1班', '王五', 'Python程序语言设计', null, '2024-06-13 14:26:48', null, '2024-06-13 14:26:48', '0');
-INSERT INTO `task` VALUES ('1801139137223327745', '00000001', '00000004', '20200205', '01', '01', '16', '0', '01', '1', '16', '2', '1班', '赵六', 'J2EE架构与程序设计', null, '2024-06-13 14:26:48', null, '2024-06-13 14:26:48', '0');
-INSERT INTO `task` VALUES ('1801139137290436609', '00000001', '00000004', '20200205', '02', '17', '18', '0', '03', '1', '2', '2', '1班', '赵六', 'J2EE架构与程序设计', null, '2024-06-13 14:26:48', null, '2024-06-13 14:26:48', '0');
-INSERT INTO `task` VALUES ('1801139137357545473', '00000002', '00000001', '20200202', '01', '01', '16', '0', '02', '1', '16', '2', '2班', '张三', '人工智能基础', null, '2024-06-13 14:26:48', null, '2024-06-13 14:26:48', '0');
-INSERT INTO `task` VALUES ('1801139137420460033', '00000002', '00000001', '20200202', '02', '01', '16', '1', '03', '1', '16', '2', '2班', '张三', '人工智能基础', null, '2024-06-13 14:26:48', null, '2024-06-13 14:26:48', '0');
-INSERT INTO `task` VALUES ('1801139137487568897', '00000002', '00000002', '20200203', '01', '01', '16', '0', '02', '2', '16', '2', '2班', '李四', '操作系统', null, '2024-06-13 14:26:48', null, '2024-06-13 14:26:48', '0');
-INSERT INTO `task` VALUES ('1801139137554677762', '00000002', '00000002', '20200203', '02', '01', '16', '2', '03', '1', '16', '2', '2班', '李四', '操作系统', null, '2024-06-13 14:26:48', null, '2024-06-13 14:26:48', '0');
-INSERT INTO `task` VALUES ('1801139137621786625', '00000002', '00000003', '20200204', '01', '01', '16', '0', '02', '1', '16', '2', '2班', '王五', 'Python程序语言设计', null, '2024-06-13 14:26:48', null, '2024-06-13 14:26:48', '0');
-INSERT INTO `task` VALUES ('1801139137688895490', '00000002', '00000003', '20200204', '02', '01', '16', '0', '03', '1', '16', '2', '2班', '王五', 'Python程序语言设计', null, '2024-06-13 14:26:48', null, '2024-06-13 14:26:48', '0');
-INSERT INTO `task` VALUES ('1801139137688895491', '00000002', '00000004', '20200205', '01', '01', '16', '0', '01', '1', '16', '2', '2班', '赵六', 'J2EE架构与程序设计', null, '2024-06-13 14:26:48', null, '2024-06-13 14:26:48', '0');
-INSERT INTO `task` VALUES ('1801139137818918913', '00000002', '00000004', '20200205', '02', '17', '18', '0', '03', '1', '2', '2', '2班', '赵六', 'J2EE架构与程序设计', null, '2024-06-13 14:26:48', null, '2024-06-13 14:26:48', '0');
-INSERT INTO `task` VALUES ('1801139137886027777', '00000003', '00000001', '20200202', '01', '01', '16', '0', '02', '1', '16', '2', '3班', '张三', '人工智能基础', null, '2024-06-13 14:26:48', null, '2024-06-13 14:26:48', '0');
-INSERT INTO `task` VALUES ('1801139137953136641', '00000003', '00000001', '20200202', '02', '01', '16', '1', '03', '1', '16', '2', '3班', '张三', '人工智能基础', null, '2024-06-13 14:26:48', null, '2024-06-13 14:26:48', '0');
-INSERT INTO `task` VALUES ('1801139138016051202', '00000003', '00000002', '20200203', '01', '01', '16', '0', '02', '2', '16', '2', '3班', '李四', '操作系统', null, '2024-06-13 14:26:48', null, '2024-06-13 14:26:48', '0');
-INSERT INTO `task` VALUES ('1801139138083160065', '00000003', '00000002', '20200203', '02', '01', '16', '2', '03', '1', '16', '2', '3班', '李四', '操作系统', null, '2024-06-13 14:26:48', null, '2024-06-13 14:26:48', '0');
-INSERT INTO `task` VALUES ('1801139138083160066', '00000003', '00000003', '20200204', '01', '01', '16', '0', '02', '1', '16', '2', '3班', '王五', 'Python程序语言设计', null, '2024-06-13 14:26:48', null, '2024-06-13 14:26:48', '0');
-INSERT INTO `task` VALUES ('1801139138146074626', '00000003', '00000003', '20200204', '02', '01', '16', '0', '03', '1', '16', '2', '3班', '王五', 'Python程序语言设计', null, '2024-06-13 14:26:48', null, '2024-06-13 14:26:48', '0');
-INSERT INTO `task` VALUES ('1801139138208989186', '00000003', '00000004', '20200205', '01', '01', '16', '0', '01', '1', '16', '2', '3班', '赵六', 'J2EE架构与程序设计', null, '2024-06-13 14:26:48', null, '2024-06-13 14:26:48', '0');
-INSERT INTO `task` VALUES ('1801139138280292353', '00000003', '00000004', '20200205', '02', '17', '18', '0', '03', '1', '2', '2', '3班', '赵六', 'J2EE架构与程序设计', null, '2024-06-13 14:26:48', null, '2024-06-13 14:26:48', '0');
-
--- ----------------------------
 -- Table structure for teacher
 -- ----------------------------
 DROP TABLE IF EXISTS `teacher`;
@@ -211,15 +142,6 @@ CREATE TABLE `teacher` (
   `is_deleted` int(11) DEFAULT '0' COMMENT '0未删除（默认），1已删除',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of teacher
--- ----------------------------
-INSERT INTO `teacher` VALUES ('1', '00000001', '张三', null, '2024-06-09 15:43:33', null, '2024-06-09 15:43:33', '0');
-INSERT INTO `teacher` VALUES ('2', '00000002', '李四', null, '2024-06-09 15:45:13', null, '2024-06-09 15:45:13', '0');
-INSERT INTO `teacher` VALUES ('3', '00000003', '王五', null, '2024-06-12 00:04:36', null, '2024-06-12 00:04:36', '0');
-INSERT INTO `teacher` VALUES ('4', '00000004', '赵六', null, '2024-06-12 00:04:48', null, '2024-06-12 00:04:48', '0');
-INSERT INTO `teacher` VALUES ('1801097140752142338', '00000005', '爱丽丝', null, '2024-06-13 11:39:55', null, '2024-06-13 11:39:55', '0');
 
 -- ----------------------------
 -- Table structure for timetable
@@ -441,3 +363,133 @@ CREATE TABLE `user` (
 INSERT INTO `user` VALUES ('1', 'admin', '1234', '1', null, '2024-05-19 22:40:38', null, '2024-05-19 22:40:38', '0');
 INSERT INTO `user` VALUES ('2', '123', '1234', '1', null, '2024-05-19 22:40:38', null, '2024-06-13 14:09:00', '0');
 INSERT INTO `user` VALUES ('3', 'admin1', '1234', '1', null, '2024-05-19 22:40:38', null, '2024-06-13 14:09:01', '0');
+
+
+-- ----------------------------
+-- 改进
+-- ----------------------------
+# 功能：连排
+ALTER TABLE task ADD COLUMN duration varchar(1) DEFAULT NULL COMMENT '连排节次' AFTER biweekly;
+
+ALTER TABLE timetable ADD COLUMN duration varchar(1) DEFAULT NULL COMMENT '连排节次' AFTER biweekly;
+ALTER TABLE timetable_rehearsal ADD COLUMN duration varchar(1) DEFAULT NULL COMMENT '连排节次' AFTER biweekly;
+update timetable set duration = '2';
+update timetable_rehearsal set duration = '2';
+
+# 功能：禁排
+CREATE TABLE `exclusion_rule` (
+                        `id` bigint(20) NOT NULL auto_increment COMMENT 'id',
+                        `course_no` varchar(8) NULL COMMENT '课程编号',
+                        `class_no` varchar(8) NULL COMMENT '班级编号',
+                        `teacher_no` varchar(8) NULL COMMENT '讲师编号',
+                        `room_no` varchar(8) NULL COMMENT '教室编号',
+                        `created_by` bigint(20) DEFAULT NULL,
+                        `created_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+                        `updated_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                        PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='禁排规则';
+ALTER TABLE exclusion_rule ADD COLUMN timeslot int DEFAULT NULL COMMENT '禁排节次' AFTER id;
+ALTER TABLE exclusion_rule ADD COLUMN courseName varchar(36) DEFAULT NULL COMMENT '课程名' AFTER course_no;
+ALTER TABLE exclusion_rule ADD COLUMN className varchar(36) DEFAULT NULL COMMENT '班级名' AFTER class_no;
+ALTER TABLE exclusion_rule ADD COLUMN teacherName varchar(36) DEFAULT NULL COMMENT '教师名' AFTER teacher_no;
+ALTER TABLE exclusion_rule ADD COLUMN roomName varchar(36) DEFAULT NULL COMMENT '教室名' AFTER room_no;
+
+INSERT INTO `exclusion_rule`(timeslot,course_no,courseName) VALUES (4, '20200202','人工智能基础');
+INSERT INTO `exclusion_rule`(timeslot,course_no,courseName) VALUES (9, '20200202','人工智能基础');
+INSERT INTO `exclusion_rule`(timeslot,course_no,courseName) VALUES (14, '20200202','人工智能基础');
+INSERT INTO `exclusion_rule`(timeslot,course_no,courseName) VALUES (19, '20200202','人工智能基础');
+INSERT INTO `exclusion_rule`(timeslot,course_no,courseName) VALUES (24, '20200202','人工智能基础');
+INSERT INTO `exclusion_rule`(timeslot,class_no,className) VALUES (17, '00000001','1班');
+INSERT INTO `exclusion_rule`(timeslot,class_no,className) VALUES (18, '00000001','1班');
+INSERT INTO `exclusion_rule`(timeslot,class_no,className) VALUES (19, '00000001','1班');
+INSERT INTO `exclusion_rule`(timeslot,teacher_no,teacherName) VALUES (18, '00000001','张三');
+INSERT INTO `exclusion_rule`(timeslot,teacher_no,teacherName) VALUES (19, '00000001','张三');
+INSERT INTO `exclusion_rule`(timeslot,teacher_no,teacherName) VALUES (23, '00000001','张三');
+INSERT INTO `exclusion_rule`(timeslot,teacher_no,teacherName) VALUES (24, '00000001','张三');
+INSERT INTO `exclusion_rule`(timeslot,room_no,roomName) VALUES (0, '20000001','明理101');
+INSERT INTO `exclusion_rule`(timeslot,room_no,roomName) VALUES (5, '20000001','明理101');
+INSERT INTO `exclusion_rule`(timeslot,room_no,roomName) VALUES (10, '20000001','明理101');
+INSERT INTO `exclusion_rule`(timeslot,room_no,roomName) VALUES (15, '20000001','明理101');
+INSERT INTO `exclusion_rule`(timeslot,room_no,roomName) VALUES (20, '20000001','明理101');
+
+# 功能：优先排
+CREATE TABLE `priority_rule` (
+                                 `id` bigint(20) NOT NULL auto_increment COMMENT 'id',
+                                 `timeslot` int NULL COMMENT '优先节次',
+                                  `course_department_no` varchar(2) NULL COMMENT '开课院系编号',
+                                  `task_attr` varchar(2) NULL COMMENT '课程性质编号 01必修课 02专业拓展课 03专业选修课 04公共必修课 05公共选修课 06公共基础课',
+                                  `course_attr` varchar(2) NULL COMMENT '学时类型编号 01理论 02实验 03实践 04体育课',
+                                  `created_by` bigint(20) DEFAULT NULL,
+                                  `created_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+                                  `updated_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                                  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='优先排规则';
+
+ALTER TABLE priority_rule ADD COLUMN course_department_name varchar(15) DEFAULT NULL COMMENT '开课院系' AFTER course_department_no;
+ALTER TABLE priority_rule ADD COLUMN task_attr_name varchar(15) DEFAULT NULL COMMENT '课程性质' AFTER task_attr;
+ALTER TABLE priority_rule ADD COLUMN course_attr_name varchar(15) DEFAULT NULL COMMENT '学时类型' AFTER course_attr;
+
+
+INSERT INTO `priority_rule`(timeslot,course_department_no,course_department_name) VALUES (2, '06','信息智能工程学院');
+INSERT INTO `priority_rule`(timeslot,course_department_no,course_department_name) VALUES (3, '06','信息智能工程学院');
+INSERT INTO `priority_rule`(timeslot,course_department_no,course_department_name) VALUES (7, '06','信息智能工程学院');
+INSERT INTO `priority_rule`(timeslot,course_department_no,course_department_name) VALUES (8, '06','信息智能工程学院');
+INSERT INTO `priority_rule`(timeslot,course_department_no,course_department_name) VALUES (12, '06','信息智能工程学院');
+INSERT INTO `priority_rule`(timeslot,course_department_no,course_department_name) VALUES (13, '06','信息智能工程学院');
+INSERT INTO `priority_rule`(timeslot,course_department_no,course_department_name) VALUES (17, '06','信息智能工程学院');
+INSERT INTO `priority_rule`(timeslot,course_department_no,course_department_name) VALUES (18, '06','信息智能工程学院');
+INSERT INTO `priority_rule`(timeslot,course_department_no,course_department_name) VALUES (22, '06','信息智能工程学院');
+INSERT INTO `priority_rule`(timeslot,course_department_no,course_department_name) VALUES (23, '06','信息智能工程学院');
+INSERT INTO `priority_rule`(timeslot,task_attr,task_attr_name) VALUES (0, '01','必修课');
+INSERT INTO `priority_rule`(timeslot,task_attr,task_attr_name) VALUES (1, '01','必修课');
+INSERT INTO `priority_rule`(timeslot,task_attr,task_attr_name) VALUES (2, '01','必修课');
+INSERT INTO `priority_rule`(timeslot,task_attr,task_attr_name) VALUES (3, '01','必修课');
+INSERT INTO `priority_rule`(timeslot,task_attr,task_attr_name) VALUES (4, '01','必修课');
+INSERT INTO `priority_rule`(timeslot,course_attr,course_attr_name) VALUES (20, '02','实验');
+INSERT INTO `priority_rule`(timeslot,course_attr,course_attr_name) VALUES (21, '02','实验');
+INSERT INTO `priority_rule`(timeslot,course_attr,course_attr_name) VALUES (22, '02','实验');
+INSERT INTO `priority_rule`(timeslot,course_attr,course_attr_name) VALUES (23, '02','实验');
+INSERT INTO `priority_rule`(timeslot,course_attr,course_attr_name) VALUES (24, '02','实验');
+
+
+ALTER TABLE task ADD COLUMN course_department varchar(15) DEFAULT NULL COMMENT '开课院系' AFTER course_name;
+ALTER TABLE task ADD COLUMN task_attr varchar(2) DEFAULT NULL COMMENT '课程性质编号 01必修课 02专业拓展课 03专业选修课 04公共必修课 05公共选修课 06公共基础课' AFTER course_name;
+ALTER TABLE task ADD COLUMN course_attr_name varchar(5) DEFAULT NULL COMMENT '学时类型' AFTER course_no;
+ALTER TABLE task ADD COLUMN task_attr_name varchar(5) DEFAULT NULL COMMENT '课程性质' AFTER course_name;
+ALTER TABLE task ADD COLUMN course_department_no varchar(2) DEFAULT NULL COMMENT '开课院系编号' AFTER course_department;
+
+# 功能：勾选部分课程先去排课
+ALTER TABLE task ADD COLUMN if_scheduled varchar(1) DEFAULT NULL COMMENT '是否排课' AFTER id;
+alter table task modify column if_scheduled boolean comment '是否排课 0不排课 1排课';
+
+# 功能：排课教室是否启用固定教室
+ALTER TABLE classes ADD COLUMN fix_room_no varchar(8) DEFAULT NULL COMMENT '固定教室编号' AFTER size;
+
+ALTER TABLE task ADD COLUMN if_fix_room boolean DEFAULT NULL COMMENT '是否采用班级固定教室 0否 1是' AFTER id;
+UPDATE `task` SET if_fix_room = false;
+
+# 功能：教师特殊安排规则
+CREATE TABLE `teacher_rule` (
+                                 `id` bigint(20) NOT NULL auto_increment COMMENT 'id',
+                                 `teacher_no` varchar(8) NULL COMMENT '教师编号',
+                                 `dTimeslot` int NULL COMMENT '每天最大节次',
+                                 `mTimeslot` int NULL COMMENT '早上最大节次',
+                                 `eTimeslot` int NULL COMMENT '下午最大节次',
+                                 `created_by` bigint(20) DEFAULT NULL,
+                                 `created_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+                                 `updated_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                                 PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='教师规则';
+
+ALTER TABLE teacher_rule ADD COLUMN teacherName varchar(36) DEFAULT NULL COMMENT '教师名' AFTER teacher_no;
+
+
+INSERT INTO `teacher_rule`(teacher_no,dTimeslot,mTimeslot,eTimeslot) VALUES ('00000001', 3,1,2);
+INSERT INTO `teacher_rule`(teacher_no,dTimeslot,mTimeslot,eTimeslot) VALUES ('00000002', 3,1,2);
+
+# 加入学分
+ALTER TABLE task ADD COLUMN course_score int DEFAULT NULL COMMENT '学分' AFTER course_department_no;
+# 加入所在教学区域
+ALTER TABLE task ADD COLUMN room_area varchar(15) DEFAULT NULL COMMENT '所在教学区域' AFTER duration;
+
+

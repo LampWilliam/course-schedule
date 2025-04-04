@@ -88,6 +88,12 @@ public class Timetable implements Serializable {
     private Integer biweekly;
 
     /**
+     * 连排节次，只能有2或4
+     */
+    @Excel(name = "连排节次")
+    private String duration;
+
+    /**
      * 关联学期Id
      */
     @Excel(name = "学期")

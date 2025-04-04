@@ -45,7 +45,7 @@ public class TaskServiceImplTest {
         Semester semester = new Semester();
         semester.setSemesterName("2023-2024学年 第1学期");
         semester.setSemesterWeeksSum(20);
-        Result result = taskService.courseScheduling(semester);
+        Result result = taskService.courseScheduling(semester.getId(),1,0);
         System.err.println(result);
     }
 

@@ -127,6 +127,8 @@ public class UploadServiceImpl implements UploadService {
         for (Task task : list) {
             Task c = new Task();
             BeanUtils.copyProperties(task, c);
+            c.setIfFixRoom(false);
+            c.setIfScheduled(false);
 
             boolean b = classTaskService.save(c);
 

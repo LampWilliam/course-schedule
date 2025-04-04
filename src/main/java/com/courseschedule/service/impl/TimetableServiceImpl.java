@@ -209,12 +209,13 @@ public class TimetableServiceImpl extends ServiceImpl<TimetableMapper, Timetable
 
     @Override
     public Result adjust(Long srcId, Integer destTimeslot) {
-        Timetable timetable = super.getById(srcId);
+        Timetable timetable = super.getById(srcId); //根据前端传回来的课程id获取课程
+        // 如果课程为空或已被删除，则返回“不存在”
         if(timetable==null || timetable.getIsDeleted().equals(BaseVo.DELETED)) {
             return Result.error("待调整课程不存在");
         }
-        timetable.setTimeslot(destTimeslot);
-        boolean b = super.updateById(timetable);
+        timetable.setTimeslot(destTimeslot);  // 调整课程时间（大节）
+        boolean b = super.updateById(timetable);  // 更新课程表
         return b ? Result.success("调整课表成功") : Result.error("调整课表失败");
     }
 }

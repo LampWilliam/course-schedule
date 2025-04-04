@@ -12,6 +12,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import javax.validation.groups.Default;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -20,6 +21,7 @@ import java.time.LocalDateTime;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
+//课程
 public class Course implements Serializable{
     private static final long serialVersionUID=1L;
 
@@ -40,9 +42,9 @@ public class Course implements Serializable{
     private String courseName;
 
     /**
-     * 课程属性
+     * 学时类型 01理论 02实验 03实践 04体育课
      */
-    @Excel(name = "课程属性")
+    @Excel(name = "学时类型")
     private String courseAttr;
 
     /**
@@ -67,5 +69,14 @@ public class Course implements Serializable{
      * 是否删除 0-未删除 1-已删除
      */
     private Integer isDeleted;
+
+
+    public interface Add extends Default {
+
+    }
+
+    public interface Update extends Default {
+
+    }
 
 }
