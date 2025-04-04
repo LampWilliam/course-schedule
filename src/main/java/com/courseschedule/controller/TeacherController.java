@@ -3,10 +3,8 @@ package com.courseschedule.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.courseschedule.common.lang.Result;
-import com.courseschedule.entity.StudentScore;
 import com.courseschedule.entity.Teacher;
 import com.courseschedule.entity.Timetable;
-import com.courseschedule.service.StudentScoreService;
 import com.courseschedule.service.TeacherService;
 import com.courseschedule.service.TimetableService;
 import com.courseschedule.utils.JwtUtils;
@@ -16,7 +14,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;

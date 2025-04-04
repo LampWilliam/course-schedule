@@ -2,9 +2,7 @@ package com.courseschedule.controller;
 
 
 import com.courseschedule.common.lang.Result;
-import com.courseschedule.entity.Course;
 import com.courseschedule.entity.Task;
-import com.courseschedule.entity.TeacherComment;
 import com.courseschedule.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;

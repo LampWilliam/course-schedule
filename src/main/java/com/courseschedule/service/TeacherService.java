@@ -3,7 +3,6 @@ package com.courseschedule.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.courseschedule.common.lang.Result;
 import com.courseschedule.entity.Teacher;
-import com.courseschedule.entity.TeacherComment;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -36,6 +35,4 @@ public interface TeacherService extends IService<Teacher> {
     //根据教师id查找教师编号
     String getClassNo(String teacherId);
 
-    //获取教师评价
-    List<TeacherComment> getTeacherComment(String teacherNo);
 }

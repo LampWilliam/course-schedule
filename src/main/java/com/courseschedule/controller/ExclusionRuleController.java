@@ -2,7 +2,6 @@ package com.courseschedule.controller;
 
 import com.courseschedule.common.lang.Result;
 import com.courseschedule.entity.ExclusionRule;
-import com.courseschedule.entity.TeacherComment;
 import com.courseschedule.service.ExclusionRuleService;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
