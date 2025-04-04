@@ -64,11 +64,6 @@ public class TeacherServiceImpl extends ServiceImpl<TeacherMapper, Teacher> impl
         teacherMapper.delete(id);
     }
 
-    @Override
-    public Teacher findByTeacherName(String teacherName) {
-        Teacher tea = teacherMapper.findByTeacherName(teacherName);
-        return tea;
-    }
 
     @Override
     public String getClassNo(String teacherId) {

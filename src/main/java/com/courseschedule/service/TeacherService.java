@@ -28,8 +28,6 @@ public interface TeacherService extends IService<Teacher> {
     //删除老师
     void delete(Long id);
 
-    //根据老师名查询老师
-    Teacher findByTeacherName(String teacherName);
 
 
     //根据教师id查找教师编号
