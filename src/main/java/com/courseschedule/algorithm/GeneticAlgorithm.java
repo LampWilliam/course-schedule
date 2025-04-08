@@ -659,15 +659,21 @@ public class GeneticAlgorithm {
         double reward = 0;
         for (String gene : individualList) {
             if(ifExceed(gene,teacherTimeslotNum)){
-                penalty += 100;
+                penalty += 10000;
+            }else{
+                penalty += 0.1;
             }
             // 检查连排起始节次是否合法
             if (!isValidStartDSlot(gene)) {
                 penalty += 50; // 违反连排规则惩罚
+            }else{
+                penalty += 5;
             }
             // 检查是否为禁排节次
             if (isExclusionSlot(gene)) {
-                penalty += 100; // 违反禁排规则惩罚
+                penalty += 10000; // 违反禁排规则惩罚
+            }else{
+                penalty += 0.1;
             }
             // 检查是否为优先排节次
             if(isPrioritySlot(gene)){
