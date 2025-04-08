@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface ExclusionRuleMapper extends BaseMapper<ExclusionRule> {
     //获取禁排规则表
-    @Select("select * from exclusion_rule" )
+    @Select("select * from exclusion_rule order by timeslot asc" )
     List<ExclusionRule> getList();
 
     //增加禁排规则

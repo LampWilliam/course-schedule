@@ -379,20 +379,20 @@ update timetable_rehearsal set duration = '2';
 # 功能：禁排
 CREATE TABLE `exclusion_rule` (
                         `id` bigint(20) NOT NULL auto_increment COMMENT 'id',
-                        `course_no` varchar(8) NULL COMMENT '课程编号',
-                        `class_no` varchar(8) NULL COMMENT '班级编号',
-                        `teacher_no` varchar(8) NULL COMMENT '讲师编号',
-                        `room_no` varchar(8) NULL COMMENT '教室编号',
+                        `course_no` varchar(8) default '' NULL COMMENT '课程编号',
+                        `class_no` varchar(8) default '' NULL COMMENT '班级编号',
+                        `teacher_no` varchar(8) default '' NULL COMMENT '讲师编号',
+                        `room_no` varchar(8) default '' NULL COMMENT '教室编号',
                         `created_by` bigint(20) DEFAULT NULL,
                         `created_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
                         `updated_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                         PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='禁排规则';
 ALTER TABLE exclusion_rule ADD COLUMN timeslot int DEFAULT NULL COMMENT '禁排节次' AFTER id;
-ALTER TABLE exclusion_rule ADD COLUMN courseName varchar(36) DEFAULT NULL COMMENT '课程名' AFTER course_no;
-ALTER TABLE exclusion_rule ADD COLUMN className varchar(36) DEFAULT NULL COMMENT '班级名' AFTER class_no;
-ALTER TABLE exclusion_rule ADD COLUMN teacherName varchar(36) DEFAULT NULL COMMENT '教师名' AFTER teacher_no;
-ALTER TABLE exclusion_rule ADD COLUMN roomName varchar(36) DEFAULT NULL COMMENT '教室名' AFTER room_no;
+ALTER TABLE exclusion_rule ADD COLUMN courseName varchar(36) DEFAULT '' COMMENT '课程名' AFTER course_no;
+ALTER TABLE exclusion_rule ADD COLUMN className varchar(36) DEFAULT '' COMMENT '班级名' AFTER class_no;
+ALTER TABLE exclusion_rule ADD COLUMN teacherName varchar(36) DEFAULT '' COMMENT '教师名' AFTER teacher_no;
+ALTER TABLE exclusion_rule ADD COLUMN roomName varchar(36) DEFAULT '' COMMENT '教室名' AFTER room_no;
 
 INSERT INTO `exclusion_rule`(timeslot,course_no,courseName) VALUES (4, '20200202','人工智能基础');
 INSERT INTO `exclusion_rule`(timeslot,course_no,courseName) VALUES (9, '20200202','人工智能基础');
@@ -415,19 +415,19 @@ INSERT INTO `exclusion_rule`(timeslot,room_no,roomName) VALUES (20, '20000001','
 # 功能：优先排
 CREATE TABLE `priority_rule` (
                                  `id` bigint(20) NOT NULL auto_increment COMMENT 'id',
-                                 `timeslot` int NULL COMMENT '优先节次',
-                                  `course_department_no` varchar(2) NULL COMMENT '开课院系编号',
-                                  `task_attr` varchar(2) NULL COMMENT '课程性质编号 01必修课 02专业拓展课 03专业选修课 04公共必修课 05公共选修课 06公共基础课',
-                                  `course_attr` varchar(2) NULL COMMENT '学时类型编号 01理论 02实验 03实践 04体育课',
-                                  `created_by` bigint(20) DEFAULT NULL,
+                                 `timeslot` int DEFAULT NULL COMMENT '优先节次',
+                                  `course_department_no` varchar(2) default '' NULL COMMENT '开课院系编号',
+                                  `task_attr` varchar(2) default '' NULL COMMENT '课程性质编号 01必修课 02专业拓展课 03专业选修课 04公共必修课 05公共选修课 06公共基础课',
+                                  `course_attr` varchar(2) default '' NULL COMMENT '学时类型编号 01理论 02实验 03实践 04体育课',
+                                  `created_by` bigint(20) default '' DEFAULT NULL,
                                   `created_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
                                   `updated_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                                   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='优先排规则';
 
-ALTER TABLE priority_rule ADD COLUMN course_department_name varchar(15) DEFAULT NULL COMMENT '开课院系' AFTER course_department_no;
-ALTER TABLE priority_rule ADD COLUMN task_attr_name varchar(15) DEFAULT NULL COMMENT '课程性质' AFTER task_attr;
-ALTER TABLE priority_rule ADD COLUMN course_attr_name varchar(15) DEFAULT NULL COMMENT '学时类型' AFTER course_attr;
+ALTER TABLE priority_rule ADD COLUMN course_department_name varchar(15) DEFAULT '' COMMENT '开课院系' AFTER course_department_no;
+ALTER TABLE priority_rule ADD COLUMN task_attr_name varchar(15) DEFAULT '' COMMENT '课程性质' AFTER task_attr;
+ALTER TABLE priority_rule ADD COLUMN course_attr_name varchar(15) DEFAULT '' COMMENT '学时类型' AFTER course_attr;
 
 
 INSERT INTO `priority_rule`(timeslot,course_department_no,course_department_name) VALUES (2, '06','信息智能工程学院');

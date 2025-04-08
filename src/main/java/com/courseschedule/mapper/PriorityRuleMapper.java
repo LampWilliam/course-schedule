@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface PriorityRuleMapper extends BaseMapper<PriorityRule> {
     //获取优先排规则表
-    @Select("select * from priority_rule" )
+    @Select("select * from priority_rule order by timeslot asc" )
     List<PriorityRule> getList();
 
     //增加优先排规则

@@ -60,13 +60,13 @@ public class ExclusionRuleServiceImpl extends ServiceImpl<ExclusionRuleMapper, E
     public void add(ExclusionRule exclusionRule) {
         exclusionRule.setCreatedTime(LocalDateTime.now());
         exclusionRule.setUpdatedTime(LocalDateTime.now());
-        String classNo = classesMapper.selectClassNo(exclusionRule.getClassName()) == null ? "" : exclusionRule.getClassName();
+        String classNo = classesMapper.selectClassNo(exclusionRule.getClassName()) == null ? "" : classesMapper.selectClassNo(exclusionRule.getClassName());
         exclusionRule.setClassNo(classNo);
-        String teacherNo = teacherMapper.selectTeacherNo(exclusionRule.getTeacherName()) == null ? "" : exclusionRule.getTeacherName();
+        String teacherNo = teacherMapper.selectTeacherNo(exclusionRule.getTeacherName()) == null ? "" : teacherMapper.selectTeacherNo(exclusionRule.getTeacherName());
         exclusionRule.setTeacherNo(teacherNo);
-        String roomNo = roomMapper.selectRoomNo1(exclusionRule.getRoomName()) == null ? "" : exclusionRule.getRoomName();
+        String roomNo = roomMapper.selectRoomNo1(exclusionRule.getRoomName()) == null ? "" : roomMapper.selectRoomNo1(exclusionRule.getRoomName());
         exclusionRule.setRoomNo(roomNo);
-        String courseNo = courseMapper.selectCourseNo(exclusionRule.getCourseName()) == null ? "" : exclusionRule.getCourseName();
+        String courseNo = courseMapper.selectCourseNo(exclusionRule.getCourseName()) == null ? "" : courseMapper.selectCourseNo(exclusionRule.getCourseName());
         exclusionRule.setCourseNo(courseNo);
 
         UserDto userDto = (UserDto) SecurityUtils.getSubject().getPrincipal();

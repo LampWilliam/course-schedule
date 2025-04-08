@@ -42,4 +42,11 @@ public class PriorityRuleController {
         priorityRuleService.delete(id);
         return Result.success("删除成功");
     }
+
+//    @GetMapping()
+//    public Result getPriorityRuleList() {
+//        List<PriorityRule> priorityRules = priorityRuleService.getList();
+//        return Result.success("查询成功", priorityRules);
+//    }
+
 }
