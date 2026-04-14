@@ -4,7 +4,7 @@
 
 为高校提供的一个高效、智能和安全的自动排课平台。该平台涵盖智能排课全流程，具有导入导出、遗传算法自动排课、手动排课、排课规则等功能，能够支持教学大纲的详细设置，包括周长、周课时以及实验与理论课程的区分，以及生成面向教室、教师和学生的课表。
 
-本仓库是后端部分，对应的**前端部分**在 [course-schedule-vue: 排课项目的前端部分 (gitee.com)](https://gitee.com/hsnvhdhh/course-schedule-vue)
+本仓库是后端部分，对应的**前端部分**在 [course-schedule-vue: 排课项目的前端部分 (gitee.com)](https://github.com/LampWilliam/course-schedule-vue)
 
 ## 安装
 
